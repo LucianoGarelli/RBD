@@ -15,6 +15,7 @@ from fluid_prop import fluid_prop
 from initial_cond import initial_cond
 import plot_data as plt_data
 import save_data as sv
+from proce import proce
 
 
 def main():
@@ -51,21 +52,24 @@ def main():
 
     #File to write force coeff
     ff = open("./Resultados/Force_coef.txt", "w")  # xq le pasamos los las fuerzas de todo el CFD??
-    ff.write(" #  Mach,     alfa,     beta,     Cd,     CL_alfa,     Cn_p_alfa,     Cn_q_alfa \n")
+    ff.write(" # Time,   Mach,     alfa,     beta,     Cd,     CL_alfa,     Cn_p_alfa,     Cn_q_alfa \n")
     ff.close()
     #File to write moment coeff
     fm = open("./Resultados/Moment_coef.txt", "w")
-    fm.write(" #  Mach,     alfa,     beta,     Clp,     Cm_alfa,     Cm_p_alfa,     Cm_q,     Cn_beta,     Cn_r \n")
+    fm.write(" # Time,   Mach,     alfa,     beta,     Clp,     Cm_alfa,     Cm_p_alfa,     Cm_q,     Cn_beta,"
+             "     Cn_r \n")
     fm.close()
 
 # ---------------------------------------------
     # File to write forces - Body Frame
     ff = open("./Resultados/Forces.txt", "w")
-    ff.write(" time,        alpha,     beta,     V_inf, u(vel_body_X), v(vel_body_Y), w(vel_body_Z),        p,       q,         r,         gx,         gy,         gz,         FX,           FY,         FZ,        MX,         MY,       MZ\n")
+    ff.write("# Time,        alpha,     beta,     V_inf, u(vel_body_X), v(vel_body_Y), w(vel_body_Z),        p, "
+             "      q,         r,         gx,         gy,         gz,         FX,           FY,         FZ,       "
+             " MX,         MY,       MZ \n")
     ff.close()
     # File to write moment - Body Frame
     fm = open("./Resultados/Moments.txt", "w")
-    fm.write("    time,     alpha,      beta,     p,      q,      r,    MX,     MY,     MZ\n")
+    fm.write("# Time,     alpha,      beta,     p,      q,      r,    MX,     MY,     MZ \n")
     fm.close()
 #---------------------------------------------
     # Convierto de deg->rad y de RPM->rad/s
@@ -98,13 +102,19 @@ def main():
     u = np.zeros((N,4))  # tomo 4 aciones de control, por ejemplo. El control correspondiente a u[k] se mantiene constante desde el instante k*Ts hasta el instante (k+1)*Ts
 
     for k in range(N):
-        #solucion = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x,u[k]), x[k], [k*Ts, (k+1)*Ts], rtol=1e-12, atol=1e-12)
-        solucion = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k],k, _t), x[k], [k * Ts, (k + 1) * Ts])
-        x[k+1] = solucion[-1]
+        x[k + 1] = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k],k, _t), x[k], [k*Ts, (k+1)*Ts],
+                                       rtol=1e-12, atol=1e-12)[-1]
+
+        #output = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k], k, _t), x[k], [k * Ts, (k + 1) * Ts],
+        #                               rtol=1e-12, atol=1e-12, full_output=True)
+        #x[k+1] = output[0][-1]
+        #print np.unique(output[1]["tsw"])
+        #x[k + 1] = solucion[-1]
+
         #Renormalizacion quaterniones
         #x[k+1,6:10] /= np.linalg.norm(x[k+1,6:10])
         t_N = k+1
-        if solucion[1,2] < -100.0:
+        if x[1,2] < -100.0:
         #15 yardas
         #if solucion[1,0] >= 13.7:
             break
@@ -125,8 +135,12 @@ def main():
     print "Coordenadas para tiempo final Vx,Vy,Vz=", x[t_N,0:3], "[m]"
 
     sv.save_data(N,t,x)
-
+    proce('./Resultados/Force_coef.txt')
+    proce('./Resultados/Forces.txt')
+    proce('./Resultados/Moment_coef.txt')
+    proce('./Resultados/Moments.txt')
     plt_data.plot_data(N, t, x, phi, theta, psi)
+
 
 
 if __name__ == "__main__":

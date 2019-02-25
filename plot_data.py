@@ -79,26 +79,22 @@ def plot_data(N, t, x, phi, theta, psi):
         axs[1].set_title('pitch')
         axs[2].set_title('yaw')
 
-
-    #Read results from McCox Fig. 9.2
-    xy = np.array([[0],[0]])
-    f = open("./Test_Cases/Pitch_yaw_168.dat", "r")
-    for line in f:
-        frags = line.split()
-        xy=np.append(xy, [[float(frags[0])],[float(frags[1])]],axis=1)
-
-
-
-
-    fig, axs = plt.subplots(1, 1, figsize=fig_size)
-    fig.canvas.set_window_title(u'pitch vs yaw')
-    fig.suptitle(u'2*Clp y 2*Cm_q  y -1*Cm_p_alfa g pitch vs yaw')
-    axs.plot(np.rad2deg(euler_angles[:,2]), np.rad2deg(euler_angles[:,1]))
-    axs.plot(xy[0,:],xy[1,:], color='green', marker='o', linestyle='dashed',linewidth=1, markersize=2)
-    axs.set_title('pitch vs yaw')
-    axs.set_xlim(-3, 3)
-    axs.set_ylim(-2, 2)
-    axs.grid(True)
+    if 0:
+        #Read results from McCox Fig. 9.2
+        xy = np.array([[0],[0]])
+        f = open("./Test_Cases/Pitch_yaw_168.dat", "r")
+        for line in f:
+            frags = line.split()
+            xy=np.append(xy, [[float(frags[0])],[float(frags[1])]],axis=1)
+        fig, axs = plt.subplots(1, 1, figsize=fig_size)
+        fig.canvas.set_window_title(u'pitch vs yaw')
+        fig.suptitle(u'2*Clp y 2*Cm_q  y -1*Cm_p_alfa g pitch vs yaw')
+        axs.plot(np.rad2deg(euler_angles[:,2]), np.rad2deg(euler_angles[:,1]))
+        axs.plot(xy[0,:],xy[1,:], color='green', marker='o', linestyle='dashed',linewidth=1, markersize=2)
+        axs.set_title('pitch vs yaw')
+        axs.set_xlim(-3, 3)
+        axs.set_ylim(-2, 2)
+        axs.grid(True)
 
 
     plt.show()

@@ -17,8 +17,7 @@ from fluid_prop import fluid_prop
 m, diam, xcg, ycg, zcg, Ixx, Iyy, Izz, steps, dt = parameters('./Data/data.dat')
 # Propiedades fluido
 rho, mu , c = fluid_prop(0, 0)
-g= 9.81
-#g = np.array([0,0,9.81])  # aceleración de la gravedad
+g= 9.81  # aceleración de la gravedad
 
 inertia_tensor = np.array([[Ixx, 0., 0.],  # el tensor de inercia en el marco body
                            [0., Iyy, 0.],
@@ -95,13 +94,14 @@ def ED_cuaterniones(x, u, k, t):
         Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa = force_coef(mach, alfa, beta)
         Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r = moment_coef(mach, alfa, beta)
 
-        ff=open('./Resultados/Force_coef.txt','ab')
-        f_coef = np.asarray([mach, alfa, beta, Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa])
+
+        ff = open('./Resultados/Force_coef.txt', 'ab')
+        f_coef = np.asarray([dt*(k +1),  mach, alfa, beta, Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa])
         np.savetxt(ff, [f_coef], delimiter=", ", fmt='%1.3e')
         ff.close()
 
         fm = open('./Resultados/Moment_coef.txt', 'ab')
-        m_coef = np.asarray([mach, alfa, beta, Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r])
+        m_coef = np.asarray([dt*(k+1), mach, alfa, beta, Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r])
         np.savetxt(fm, [m_coef], delimiter=", ", fmt='%1.3e')
         fm.close()
 
@@ -147,7 +147,7 @@ def ED_cuaterniones(x, u, k, t):
 
         C_body[5] = qdy*S*diam*C_body[5]
 
-# antes estaba abajo pero g_body lo pas'e arriba porque necesito para el Forces.txr
+        # antes estaba abajo pero g_body lo pas'e arriba porque necesito para el Forces.txt
 
         g_body = Q_body2ned[2,:] * g  # multiplico Q_body2ned.T (o sea, la inversa de Q_body2ned) por [0,0,g]^T
 
