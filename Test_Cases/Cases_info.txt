@@ -107,3 +107,13 @@ alpha 	= 0 [grados]
 beta 	= 0
 phi 	= 0
 theta 	= 90 [grados] 
+
+######################################################
+CASO 10: Ejemplo Coeficiente de drag variable
+      : Cd = = 0.125*math.tanh(5*(mach-0.9))+0.425
+      : .308" 168 grain Sierra International Bullet
+
+######################################################
+CASO 11: Ejemplo Coeficiente de drag variable
+      : Cd0 y Cd_delta^2 tomados de tabla Apendix A
+      : .308" 168 grain Sierra International Bullet

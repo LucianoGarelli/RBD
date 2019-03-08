@@ -63,9 +63,8 @@ def main():
 # ---------------------------------------------
     # File to write forces - Body Frame
     ff = open("./Resultados/Forces.txt", "w")
-    ff.write("# Time,        alpha,     beta,     V_inf, u(vel_body_X), v(vel_body_Y), w(vel_body_Z),        p, "
-             "      q,         r,         gx,         gy,         gz,         FX,           FY,         FZ,       "
-             " MX,         MY,       MZ \n")
+    ff.write("# Time,     alpha,     beta,     V_inf,    u(v_body_X), v(v_body_Y), w(v_body_Z),  p, "
+             "      q,         r,         gx,         gy,       gz,      FX_body,    FY_body,    FZ_body  \n")
     ff.close()
     # File to write moment - Body Frame
     fm = open("./Resultados/Moments.txt", "w")
@@ -92,8 +91,10 @@ def main():
     q0 = utiles.Quaternion.fromEulerAngles(roll=phi, pitch=theta, yaw=psi)  # orientación inicial, obtenida a partir de los ángulos de Euler
     x0[6] = q0.d
     x0[7:10] = q0.v
-    x0[3] = V # velocidad inicial en eje x del marco body
-    x0[10] = p
+    x0[3] = V*math.cos(alfa)*math.cos(beta) # velocidad inicial en body
+    x0[4] = V*math.sin(beta)
+    x0[5] = V*math.sin(alfa)*math.cos(beta)
+    x0[10] = p # rotacion inicial en body
     x0[11] = q
     x0[12] = r
 
@@ -102,7 +103,7 @@ def main():
     u = np.zeros((N,4))  # tomo 4 aciones de control, por ejemplo. El control correspondiente a u[k] se mantiene constante desde el instante k*Ts hasta el instante (k+1)*Ts
 
     for k in range(N):
-        x[k + 1] = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k],k, _t), x[k], [k*Ts, (k+1)*Ts],
+        x[k + 1] = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k], k, _t), x[k], [k*Ts, (k+1)*Ts],
                                        rtol=1e-12, atol=1e-12)[-1]
 
         #output = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k], k, _t), x[k], [k * Ts, (k + 1) * Ts],
@@ -114,7 +115,7 @@ def main():
         #Renormalizacion quaterniones
         #x[k+1,6:10] /= np.linalg.norm(x[k+1,6:10])
         t_N = k+1
-        if x[1,2] < -100.0:
+        if x[1,2] < -1.0:
         #15 yardas
         #if solucion[1,0] >= 13.7:
             break

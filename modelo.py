@@ -52,7 +52,7 @@ def ED_cuaterniones(x, u, k, t):
 
     #--- Ecuaciones cinemáticas ---#
 
-    x_prima[0:3] = Q_body2ned.dot(x[3:6])  # paso la velocidad de body a ned
+    x_prima[0:3] = Q_body2ned.dot(x[3:6])  # paso la velocidad de body[3:6] a ned[0:3]
     x_prima[2] *= -1. # para tener altura en vez de "profundidad"
 
     q_prima = q_body2ned.mult_cuat_times_vec(x[10:13]*.5)
@@ -76,7 +76,7 @@ def ED_cuaterniones(x, u, k, t):
         #assert vel_rel_body[0] > 0, "u_vel < 0. %f" % vel_rel_body[0]
         vt = np.linalg.norm(vel_rel_body)
         # ángulo de ataque
-        alfa = np.arctan(vel_rel_body[2] / vel_rel_body[0])
+        alfa = np.arctan2(vel_rel_body[2], vel_rel_body[0])
         # ángulo de deslizamiento
         beta = np.arcsin(vel_rel_body[1] / vt)
 
@@ -139,7 +139,6 @@ def ED_cuaterniones(x, u, k, t):
         # qt = sqrt(q^2 + r^2) McCoy pag.38 VER Cm_q y Cn_r
         C_body[4] = Cm_alfa * math.sin(alfa) * math.cos(beta) +(x[11] * diam / (2 * vt)) * Cm_q + \
                     (x[10] * diam / (2 * vt)) * Cm_p_alfa * vel_rel_body[1] / vt
-    
         C_body[4] = qdy*S*diam*C_body[4]
 
         C_body[5] = Cn_beta * math.sin(beta) + (x[12] * diam / (2 * vt)) * Cn_r + \
@@ -149,12 +148,12 @@ def ED_cuaterniones(x, u, k, t):
 
         # antes estaba abajo pero g_body lo pas'e arriba porque necesito para el Forces.txt
 
-        g_body = Q_body2ned[2,:] * g  # multiplico Q_body2ned.T (o sea, la inversa de Q_body2ned) por [0,0,g]^T
+        g_body = Q_body2ned.T.dot([0,0,g]) #Q_body2ned[2,:] * g  # multiplico Q_body2ned.T (o sea, la inversa de Q_body2ned) por [0,0,g]^T
 
         #aca escribir idem arriba pero con Coef[0], Coef[1],....., Coef[5]
 
         ff = open('./Resultados/Forces.txt', 'ab')
-        f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2],  C_body[3],C_body[4],C_body[5]])
+        f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2]])
         np.savetxt(ff, [f_force], delimiter=", ", fmt='%1.3e')
         ff.close()
 
@@ -163,30 +162,16 @@ def ED_cuaterniones(x, u, k, t):
         np.savetxt(fm, [m_moment], delimiter=", ", fmt='%1.3e')
         fm.close()
 
-        #F_wind = np.zeros(3)  # acá iría el cálculo de las fuerzas en marco viento
-        #M_wind = np.zeros(3)  # acá iría el cálculo de los momentos en marco viento
-
-        # a esto seguramente va a haber que sumarle algún término de rozamiento que dependa de vel_rel_body
-        # y del área del cuerpo expuesta en cada plano coordenado del marco cuerpo
-        #F_body = W2B.dot(F_wind)
-        #M_body = W2B.dot(M_wind)
-
         F_body = C_body[0:3]
         M_body = C_body[3:6]
 
-    else:
-        F_wind = np.zeros(3)  # acá iría el cálculo de las fuerzas en marco viento
-        M_wind= np.zeros(3)  # acá iría el cálculo de los momentos en marco viento
-
-# lo pas'e arriba porque lo necesito para escribir Forces.txt
-    #g_body = Q_body2ned[2,:] * g  # multiplico Q_body2ned.T (o sea, la inversa de Q_body2ned) por [0,0,g]^T
-
-    x_prima[3] = x[12]*x[4] - x[11]*x[5] + g_body[0] + F_body[0]/m
-    x_prima[4] = x[10]*x[5] - x[12]*x[3] + g_body[1] + F_body[1]/m
-    x_prima[5] = x[11]*x[3] - x[10]*x[4] + g_body[2] + F_body[2]/m
+        x_prima[3] = x[12] * x[4] - x[11] * x[5] + g_body[0] + F_body[0] / m
+        x_prima[4] = x[10] * x[5] - x[12] * x[3] + g_body[1] + F_body[1] / m
+        x_prima[5] = x[11] * x[3] - x[10] * x[4] + g_body[2] + F_body[2] / m
 
     # Lo siguiente es equivalente a hacer A\b en matlab en vez inv(A)*b (siempre conviene evitar calcular inversas)
-    x_prima[10:13] = sp.linalg.solve(inertia_tensor, np.cross(inertia_tensor.dot(x[10:13]),x[10:13]) + M_body, sym_pos=True)  # sym_pos indica que el tensor de inercia es simétrico y definido positivo, lo que acelera los cálculos
+    x_prima[10:13] = sp.linalg.solve(inertia_tensor, np.cross(inertia_tensor.dot(x[10:13]),x[10:13]) + M_body, sym_pos=True)
+    # sym_pos indica que el tensor de inercia es simétrico y definido positivo, lo que acelera los cálculos
 
 
     return x_prima

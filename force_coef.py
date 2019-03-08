@@ -3,8 +3,8 @@ import numpy as np
 
 def force_coef(mach, alfa, beta):
 
-    Cd=0.25
-    CL_alfa=0.1
+    Cd=0.3
+    CL_alfa=0
     Cn_p_alfa=0
     Cn_q_alfa=0
 
@@ -15,10 +15,14 @@ def force_coef(mach, alfa, beta):
         Cd0 = 0.3
 
     #######################
+    # Ejemplo drag variable
+    # CD Coeficiente de drag funncion del Mach
+
+    #Cd=0.125*math.tanh(5*(mach-0.9))+0.425
 
     #######################
     # Ejemplo .308" 168 grain Apendix A pag 217
-    if 0:
+    if 1:
         # Cd0
         M = [0, 0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.5]
         Cd0_exp = [0.14, 0.14, 0.142, 0.16, 0.24, 0.43, 0.449, 0.447, 0.434, 0.41, 0.385, 0.365, 0.35, 0.339, 0.32]
@@ -35,10 +39,10 @@ def force_coef(mach, alfa, beta):
         Cd = Cd0 + Cdd2*alfa_total2
 
         # Cl_alfa
-        Ma = [0, 0.5,  0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.5]
-        CL_alfa_exp = [1.75, 1.63, 1.45, 1.40, 1.35, 1.3, 1.35, 1.55, 1.7, 1.9, 2.15, 2.32, 2.45, 2.58, 2.68, 2.85]
+        #Ma = [0, 0.5,  0.8, 0.85, 0.9, 0.95, 1.0, 1.05, 1.1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.5]
+        #CL_alfa_exp = [1.75, 1.63, 1.45, 1.40, 1.35, 1.3, 1.35, 1.55, 1.7, 1.9, 2.15, 2.32, 2.45, 2.58, 2.68, 2.85]
 
-        CL_alfa = np.interp(mach, Ma, CL_alfa_exp)
+        #CL_alfa = np.interp(mach, Ma, CL_alfa_exp)
 
 
         # Cn_p_alfa -> Magnus force
