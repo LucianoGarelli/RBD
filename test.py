@@ -9,6 +9,7 @@ import scipy.integrate
 import matplotlib.pyplot as plt
 import modelo
 import utiles
+import conservation as cons
 
 from parameters import parameters
 from fluid_prop import fluid_prop
@@ -48,7 +49,7 @@ def main():
     print "alfa, beta=", alfa, beta, "[deg]"
     print "p,q,r=", p, q, r, "[RPM]"
     print "phi, theta, psi=", phi, theta, psi, "[deg]"
-    print "XE, YE, ZE=", XE, YE, ZE, "[deg]"
+    print "XE, YE, ZE=", XE, YE, ZE, "[m]"
 
     #File to write force coeff
     ff = open("./Resultados/Force_coef.txt", "w")  # xq le pasamos los las fuerzas de todo el CFD??
@@ -91,6 +92,7 @@ def main():
     q0 = utiles.Quaternion.fromEulerAngles(roll=phi, pitch=theta, yaw=psi)  # orientación inicial, obtenida a partir de los ángulos de Euler
     x0[6] = q0.d
     x0[7:10] = q0.v
+    x0[0:3] += [XE, YE, ZE]
     x0[3] = V*math.cos(alfa)*math.cos(beta) # velocidad inicial en body
     x0[4] = V*math.sin(beta)
     x0[5] = V*math.sin(alfa)*math.cos(beta)
@@ -125,17 +127,18 @@ def main():
 
     print '#########################'
     print 'Resultados Generales'
-    print "Altura maxima =", np.amax(x[:,2]) + ZE , "[m]"
-    print "Distancia =", math.sqrt((x[t_N,0]**2+x[t_N,1]**2)) + XE, "[m]"
-    print "Altura para tiempo final =", t[t_N], "[s]", (x[t_N,2] + ZE) , "[m]"
+    print "Altura maxima =", np.amax(x[:,2])  , "[m]"
+    print "Distancia =", math.sqrt((x[t_N,0]**2+x[t_N,1]**2)) , "[m]"
+    print "Altura para tiempo final =", t[t_N], "[s]", (x[t_N,2]) , "[m]"
 
     quat = utiles.Quaternion(x[t_N,6], x[t_N,7:10])
     velocidad_ned = quat.rotate_vector(x[t_N,3:6])
 
     print "Velocidades para tiempo final Vx,Vy,Vz=", velocidad_ned , "[m/s]"
-    print "Coordenadas para tiempo final Vx,Vy,Vz=", x[t_N,0:3], "[m]"
+    print "Coordenadas para tiempo final Vx,Vy,Vz=", x[t_N,0:3] , "[m]"
 
-    sv.save_data(N,t,x)
+    sv.save_data(N,t,x,Ixx,Iyy,Izz)
+    cons.conservation(N, x, Ixx, Iyy, Izz)
     proce('./Resultados/Force_coef.txt')
     proce('./Resultados/Forces.txt')
     proce('./Resultados/Moment_coef.txt')

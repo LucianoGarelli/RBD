@@ -52,7 +52,7 @@ def plot_data(N, t, x, phi, theta, psi):
             axs[2].set_title('qv2')
             axs[3].set_title('qv3')
 
-    if 0:
+    if 1:
         fig, axs = plt.subplots(1, 3, figsize=fig_size)
         fig.canvas.set_window_title('Velocidad angular en marco body')
         fig.suptitle('Velocidad angular en marco body')
@@ -69,7 +69,7 @@ def plot_data(N, t, x, phi, theta, psi):
         quat = utiles.Quaternion(xk[6], xk[7:10])
         euler_angles[k] = quat.get_euler_anles()
 
-    if 0:
+    if 1:
         fig, axs = plt.subplots(1, 3, figsize=fig_size)
         fig.canvas.set_window_title(u'Orientación en ángulos de Euler')
         fig.suptitle(u'Orientación en ángulos de Euler')

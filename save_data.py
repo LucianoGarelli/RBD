@@ -6,7 +6,7 @@ import utiles
 
 # Grafico la evolucion de los estados
 
-def save_data(N, t, x):
+def save_data(N, t, x, Ixx, Iyy, Izz):
 
     if os.path.isfile("./Resultados/Data.hdf5"):
         os.remove("./Resultados/Data.hdf5")
@@ -26,7 +26,13 @@ def save_data(N, t, x):
 
 
     f.create_dataset('Body_vel', data=x[:,3:6])
-    f.create_dataset('Body_ang_vel', data=x[:,10:13])
+    f.create_dataset('Body_ang_vel', data=x[:,10:13],dtype=np.float64) # modificamos formato de numero | np.float64
+
+    velocidad_ang_ned = np.empty((N+1,3))
+    for k, xk in enumerate(x):
+        quat = utiles.Quaternion(xk[6], xk[7:10])
+        velocidad_ang_ned[k] = quat.rotate_vector(xk[10:13])
+    f.create_dataset('Inertial_ang_vel', data=velocidad_ang_ned,dtype=np.float64) # modificamos formato de numero)
 
     euler_angles = np.empty((N+1,3))
     for k, xk in enumerate(x):
@@ -34,9 +40,11 @@ def save_data(N, t, x):
         euler_angles[k] = quat.get_euler_anles()
     f.create_dataset('Euler_ang', data=euler_angles)
 
-
-
-
+    ##matriz_rot = np.empty((N+1,3))
+    #for k, xk in enumerate(x):
+    #    matriz_rot[k] = quat.rotate_vector()
+    #f.create_dataset('matriz_rot', data=euler_angles)
+    
     f.close()
 
-    return
+    return velocidad_ang_ned
