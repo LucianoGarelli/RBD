@@ -79,7 +79,7 @@ def plot_data(N, t, x, phi, theta, psi):
         axs[1].set_title('pitch')
         axs[2].set_title('yaw')
 
-    if 0:
+    if 1:
         #Read results from McCox Fig. 9.2
         xy = np.array([[0],[0]])
         f = open("./Test_Cases/Pitch_yaw_168.dat", "r")
