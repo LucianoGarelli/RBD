@@ -17,7 +17,7 @@ from fluid_prop import fluid_prop
 m, diam, xcg, ycg, zcg, Ixx, Iyy, Izz, steps, dt = parameters('./Data/data.dat')
 # Propiedades fluido
 rho, mu , c = fluid_prop(0, 0)
-g= 9.81  # aceleración de la gravedad
+g= 0  # aceleración de la gravedad
 
 inertia_tensor = np.array([[Ixx, 0., 0.],  # el tensor de inercia en el marco body
                            [0., Iyy, 0.],

@@ -1,11 +1,11 @@
 Condiciones iniciales (Ang en grados, luego se convierten a Rad) y (p,q,r) en RPM
-V 20.0
+V 100.0
 alfa 0
 beta 0
-p 30
+p 0
 q 0
-r 0.1
+r 0
 phi 0
-theta 0
+theta 45
 psi 0
 XE 0 YE 0 ZE 0

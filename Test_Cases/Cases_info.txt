@@ -1,7 +1,8 @@
 Lista de casos de validación/verificación
 
 ########################################################
-CASO 1: Tiro parabolico en vacío maximo alcance.
+CASO A01
+ex_CASO 1: Tiro parabolico en vacío maximo alcance.
 	V 100.0, alfa = beta = p = q = r = phi = psi =0
 	theta 45
 	XE 0 YE 0 ZE 0
@@ -9,7 +10,8 @@ d_max = V^2/g = 1019.36 [m]
 h_max = V^2/(4*g) = 254.84 [m]
 t_max = V/(9.81*cos(45)) = 14.41 [s]
 #######################################################
-CASO 2: Tiro parabolico en vacío maximo alcance.
+CASO A02
+exCASO 2: Tiro parabolico en vacío maximo alcance.
 	V 100.0, alfa = beta = p = q = r = phi = 0
 	psi = 45
 	theta 45
@@ -18,7 +20,8 @@ d_max = V^2/g = 1019.36 [m]
 h_max = V^2/(4*g) = 254.84 [m]
 t_max = V/(9.81*cos(45)) = 14.41 [s]
 ######################################################
-CASO 3: Tiro parabolico en vacío maximo alcance.
+CASO A03
+exCASO 3: Tiro parabolico en vacío maximo alcance.
 	V 100.0, alfa = beta = q = r =  phi = 0
 	p = 100
 	psi = 45
@@ -28,7 +31,8 @@ d_max = V^2/g = 1019.36 [m]
 h_max = V^2/(4*g) = 254.84 [m]
 t_max = V/(9.81*cos(45)) = 14.41 [s]
 ######################################################
-CASO 4: Tiro parabolico en vacío maximo alcance.
+CASO A04
+exCASO 4: Tiro parabolico en vacío maximo alcance.
 	V 100.0, alfa = beta = p = r =  phi = 0
 	q = 100
 	psi = 45
@@ -38,7 +42,8 @@ d_max = V^2/g = 1019.36 [m]
 h_max = V^2/(4*g) = 254.84 [m]
 t_max = V/(9.81*cos(45)) = 14.41 [s]
 ######################################################
-CASO 5: Tiro parabolico en vacío maximo alcance.
+CASO A05
+exCASO 5: Tiro parabolico en vacío maximo alcance.
 	V 100.0, alfa = beta = p = q =  phi = 0
 	r = 100
 	psi = 45
@@ -48,7 +53,8 @@ d_max = V^2/g = 1019.36 [m]
 h_max = V^2/(4*g) = 254.84 [m]
 t_max = V/(9.81*cos(45)) = 14.41 [s]
 ######################################################
-CASO 6: Tiro parabolico drag cte -> Cd=0.1 (Flat-fire -> theta<5.7 deg)
+CASO B01
+exCASO 6: Tiro parabolico drag cte -> Cd=0.1 (Flat-fire -> theta<5.7 deg)
 MAL    	Idem CASO 1 con Cd 0.1
 	V 100.0, alfa = beta = p = q = r = phi = psi =0
 	theta 45% no dan tan OK, xq usamos HIP de Flat-fired,y theta=45
@@ -60,7 +66,8 @@ d_max =  654.68  [m] %numerica
 z_final = 0.593	 [m] %numerica
 % la analit dio mal, xq theta 45, no sirve esta eq
 ######################################################
-CASO 7: es el CASO6 pero con lanzamiento que se cumplan las HIP flat-fired
+CASO B02
+exCASO 7: es el CASO6 pero con lanzamiento que se cumplan las HIP flat-fired
    	Tiro parabolico drag cte -> Cd=0.3 (Flat-fire -> theta<5.7 deg)
      	V 100.0, alfa = beta = p = q = r = phi = psi =0
 	theta 5 
@@ -71,7 +78,8 @@ z_final = Y = -128.76 [m] %analit
 d_max = 396.75    [m] %numerica
 z_final = -126.16 [m] %numerica
 ######################################################
-CASO 8: Tiro parabolico drag cte -> Cd=0.3 (Flat-fire -> theta<5.7 deg)
+CASO B03
+exCASO 8: Tiro parabolico drag cte -> Cd=0.3 (Flat-fire -> theta<5.7 deg)
 	Idem Case_7, se incorpora altura de lanzamiento
 	V 1000.0, alfa = beta =  phi = 0
 	p = q = r = 0
@@ -85,8 +93,10 @@ t_total = 6 [s] Ver Case_8.m
 Se estiman los coef para un Cd = cte
 
 ######################################################
-CASO 9: Ejemplo 9.1 Modern Exterior Ballistic - pg 194 McCoy
+CASO FM01
+exCASO 9: Ejemplo 9.1 Modern Exterior Ballistic - pg 194 McCoy
       : .308" 168 grain Sierra International Bullet
+      : Caso hasta 15 [yards]
 
 Diam:   0.00782 [m] (0.308")
 Largo:  0.0311 [m] (1.226")
@@ -103,13 +113,23 @@ alpha 	= 0.0
 beta 	= 0
 phi 	= 0
 theta 	= 0.841 [grados] (50.46 [min])
+
 ######################################################
-CASO 10: Ejemplo Coeficiente de drag variable
+CASO FM02
+exCASO 9b: Ejemplo 9.1 Modern Exterior Ballistic - pg 194 McCoy
+       : .308" 168 grain Sierra International Bullet
+       : Caso hasta 600 [yards]
+Idem caso 9 pero llega hasta 600 [yds]
+
+######################################################
+CASO B04
+exCASO 10: Ejemplo Coeficiente de drag variable
        : Cd = 0.125*math.tanh(5*(mach-0.9))+0.425
        : .308" 168 grain Sierra International Bullet
 
 ######################################################
-CASO 11: Ejemplo Coeficiente de drag variable
+CASO B06
+exCASO 11: Ejemplo Coeficiente de drag variable
        : Cd0 y Cd_delta^2 tomados de tabla Apendix A
        : .308" 168 grain Sierra International Bullet
 ######################################################

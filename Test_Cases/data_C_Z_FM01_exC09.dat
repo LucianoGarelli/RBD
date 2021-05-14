@@ -1,0 +1,7 @@
+Lista de datos proyectil .308" 168 grain
+masa 0.0109
+diam 0.00782
+xcg 0.006 ycg 0.0 zcg 0.0
+Ixx 7.22819944e-8 Iyy 5.37871683e-7 Izz 5.37871683e-7
+steps 1750
+dt 0.00001
