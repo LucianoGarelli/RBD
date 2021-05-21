@@ -17,7 +17,7 @@ from fluid_prop import fluid_prop
 m, diam, xcg, ycg, zcg, Ixx, Iyy, Izz, steps, dt = parameters('./Data/data.dat')
 # Propiedades fluido
 rho, mu , c = fluid_prop(0, 0)
-g= 0  # aceleración de la gravedad
+g= 9.81  # aceleración de la gravedad
 
 inertia_tensor = np.array([[Ixx, 0., 0.],  # el tensor de inercia en el marco body
                            [0., Iyy, 0.],
@@ -84,6 +84,7 @@ def ED_cuaterniones(x, u, k, t):
         cb = np.cos(beta)
         sa = np.sin(alfa)
         sb = np.sin(beta)
+        delta2 = (sa*cb)**2+sb**2 # delta = sin(alpha_total)
         # matriz de cambio de coordenadas, de marco wind a marco body
         W2B = np.array([[ca * cb, -ca * sb, -sa],
                         [sb, cb, 0],
@@ -96,12 +97,12 @@ def ED_cuaterniones(x, u, k, t):
 
 
         ff = open('./Resultados/Force_coef.txt', 'ab')
-        f_coef = np.asarray([dt*(k +1),  mach, alfa, beta, Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa])
+        f_coef = np.asarray([dt*(k +1),  mach, alfa, beta,delta2, Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa])
         np.savetxt(ff, [f_coef], delimiter=", ", fmt='%1.3e')
         ff.close()
 
         fm = open('./Resultados/Moment_coef.txt', 'ab')
-        m_coef = np.asarray([dt*(k+1), mach, alfa, beta, Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r])
+        m_coef = np.asarray([dt*(k+1), mach, alfa, beta,delta2, Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r])
         np.savetxt(fm, [m_coef], delimiter=", ", fmt='%1.3e')
         fm.close()
 
@@ -153,12 +154,12 @@ def ED_cuaterniones(x, u, k, t):
         #aca escribir idem arriba pero con Coef[0], Coef[1],....., Coef[5]
 
         ff = open('./Resultados/Forces.txt', 'ab')
-        f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2]])
+        f_force = np.asarray([dt*(k+1), alfa, beta, delta2, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2]])
         np.savetxt(ff, [f_force], delimiter=", ", fmt='%1.3e')
         ff.close()
 
         fm = open('./Resultados/Moments.txt', 'ab')
-        m_moment = np.asarray([dt*(k+1), alfa, beta, x[3], x[4], x[5],  C_body[3],C_body[4],C_body[5]])
+        m_moment = np.asarray([dt*(k+1), alfa, beta, delta2, x[3], x[4], x[5],  C_body[3],C_body[4],C_body[5]])
         np.savetxt(fm, [m_moment], delimiter=", ", fmt='%1.3e')
         fm.close()
 
