@@ -1,7 +1,0 @@
-Lista de datos proyectil M. Costello AIAA 2007-6582
-masa 0.03
-diam 0.0135
-xcg 0.0573 ycg 0.0 zcg 0.0
-Ixx 0.74e-6 Iyy 0.484e-4 Izz 0.484e-4
-steps 115
-dt 0.0002
