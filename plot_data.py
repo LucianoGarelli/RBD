@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import utiles
+import math as math
 
 # Grafico la evolucion de los estados
 
@@ -11,9 +12,10 @@ def plot_data(N, t, x, phi, theta, psi):
 
     fig, axs = plt.subplots(1,3, figsize=fig_size)
     fig.canvas.set_window_title('Coordenadas en marco inercial')
-    fig.suptitle('Coordenadas en marco inercial')
+    fig.suptitle('Coordenadas en marco inercial (z=elevacion)')
     for k in range(3):
         axs[k].plot(t, x[:,k])
+        axs[k].grid()
     axs[0].set_title('x')
     axs[1].set_title('y')
     axs[2].set_title('z')
@@ -23,6 +25,7 @@ def plot_data(N, t, x, phi, theta, psi):
     fig.suptitle('Velocidad en marco body')
     for k in range(3):
         axs[k].plot(t, x[:,k+3])
+        axs[k].grid()
     axs[0].set_title('u')
     axs[1].set_title('v')
     axs[2].set_title('w')
@@ -32,14 +35,18 @@ def plot_data(N, t, x, phi, theta, psi):
         quat = utiles.Quaternion(xk[6], xk[7:10])
         velocidad_ned[k] = quat.rotate_vector(xk[3:6])
 
-    fig, axs = plt.subplots(1,3, figsize=fig_size)
+    fig, axs = plt.subplots(1,4, figsize=fig_size)
     fig.canvas.set_window_title('Velocidad en marco NED')
     fig.suptitle('Velocidad en marco NED')
     for k in range(3):
         axs[k].plot(t, velocidad_ned[:,k])
+        axs[k].grid()
+    axs[3].plot(t, np.linalg.norm(velocidad_ned,axis=1))
+    axs[3].grid()
     axs[0].set_title('vx')
     axs[1].set_title('vy')
     axs[2].set_title('vz')
+    axs[3].set_title('mag(V)')
 
     if 0:
         fig, axs = plt.subplots(1, 4, figsize=fig_size)
@@ -47,10 +54,11 @@ def plot_data(N, t, x, phi, theta, psi):
         fig.suptitle(u'Cuaternión de orientación')
         for k in range(4):
             axs[k].plot(t, x[:,k+6])
-            axs[0].set_title('qe')
-            axs[1].set_title('qv1')
-            axs[2].set_title('qv2')
-            axs[3].set_title('qv3')
+            axs[k].grid()
+        axs[0].set_title('qe')
+        axs[1].set_title('qv1')
+        axs[2].set_title('qv2')
+        axs[3].set_title('qv3')
 
     if 1:
         fig, axs = plt.subplots(1, 3, figsize=fig_size)
@@ -58,9 +66,10 @@ def plot_data(N, t, x, phi, theta, psi):
         fig.suptitle('Velocidad angular en marco body')
         for k in range(3):
             axs[k].plot(t, x[:,k+10])
-            axs[0].set_title('p')
-            axs[1].set_title('q')
-            axs[2].set_title('r')
+            axs[k].grid()
+        axs[0].set_title('p')
+        axs[1].set_title('q')
+        axs[2].set_title('r')
    # Grafico la evolución de la orientación expresándola mediante los ángulos de Euler
 
 
@@ -74,12 +83,13 @@ def plot_data(N, t, x, phi, theta, psi):
         fig.canvas.set_window_title(u'Orientación en ángulos de Euler')
         fig.suptitle(u'Orientación en ángulos de Euler')
         for k in range(3):
-            axs[k].plot(t, euler_angles[:,k])
+            axs[k].plot(t, euler_angles[:,k]*180/math.pi)
+            axs[k].grid()
         axs[0].set_title('roll')
         axs[1].set_title('pitch')
         axs[2].set_title('yaw')
 
-    if 1:
+    if 0:
         #Read results from McCox Fig. 9.2
         xy = np.array([[0],[0]])
         f = open("./Test_Cases/Pitch_yaw_168.dat", "r")
