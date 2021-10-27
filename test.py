@@ -18,7 +18,7 @@ import plot_data as plt_data
 import save_data as sv
 from proce import proce
 
-import o
+import os
 def main():
 
     print '#########################'
@@ -50,6 +50,17 @@ def main():
     print "p,q,r=", p, q, r, "[RPM]"
     print "phi, theta, psi=", phi, theta, psi, "[deg]"
     print "XE, YE, ZE=", XE, YE, ZE, "[m]"
+
+    MYDIR = ("Resultados")
+    CHECK_FOLDER = os.path.isdir(MYDIR)
+
+    # If folder doesn't exist, then create it.
+    if not CHECK_FOLDER:
+        os.makedirs(MYDIR)
+        print("Directorio Resultados creado: ", MYDIR)
+
+    else:
+        print(MYDIR, "Directorio Resultados existente.")
 
     #File to write force coeff
     ff = open("./Resultados/Force_coef.txt", "w")  # xq le pasamos los las fuerzas de todo el CFD??
