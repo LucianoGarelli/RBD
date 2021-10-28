@@ -106,7 +106,66 @@ def plot_data(N, t, x, phi, theta, psi):
         axs.set_ylim(-2, 2)
         axs.grid(True)
 
+    plt.show(block=False)
 
+    #plt.show()
+
+    return
+
+def plot_force():
+    fig_size = (12,4)
+    xy = np.array([[0],[0],[0],[0]])
+    f = open("./Resultados/Forces_proc.txt", "r")
+    line1 = f.readline()
+    for line in f:
+        frags = line.split(',')
+        xy=np.append(xy, [[float(frags[0])],[float(frags[13])],[float(frags[14])],[float(frags[15])]],axis=1)
+    xy=np.delete(xy, 0, axis=1)
+    fig, axs = plt.subplots(1,3,figsize=fig_size)
+    fig.canvas.set_window_title('Forces')
+
+    axs[0].plot(xy[0],xy[1])
+    axs[1].plot(xy[0],xy[2])
+    axs[2].plot(xy[0],xy[3])
+
+    axs[0].set_title('Force X ')
+    axs[1].set_title('Force Y ')
+    axs[2].set_title('Force Z ')
+
+    axs[0].grid(True)
+    axs[1].grid(True)
+    axs[2].grid(True)
+
+    plt.show(block=False)
+    #plt.show()
+
+    return
+
+
+def plot_moments():
+    fig_size = (12, 4)
+    xy = np.array([[0], [0], [0], [0]])
+    f = open("./Resultados/Moments_proc.txt", "r")
+    line1 = f.readline()
+    for line in f:
+        frags = line.split(',')
+        xy = np.append(xy, [[float(frags[0])], [float(frags[6])], [float(frags[7])], [float(frags[8])]], axis=1)
+    fig, axs = plt.subplots(1, 3, figsize=fig_size)
+    fig.canvas.set_window_title('Moments')
+
+    axs[0].plot(xy[0], xy[1])
+    axs[1].plot(xy[0], xy[2])
+    axs[2].plot(xy[0], xy[3])
+
+    axs[0].set_title('Moment X ')
+    axs[1].set_title('Moment Y ')
+    axs[2].set_title('Moment Z ')
+
+    axs[0].grid(True)
+    axs[1].grid(True)
+    axs[2].grid(True)
+
+    #plt.show(block=False)
     plt.show()
 
     return

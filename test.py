@@ -64,7 +64,7 @@ def main():
 
     #File to write force coeff
     ff = open("./Resultados/Force_coef.txt", "w")  # xq le pasamos los las fuerzas de todo el CFD??
-    ff.write(" # Time,   Mach,     alfa,     beta,     delta2,     Cd,     CL_alfa,     Cn_p_alfa,     Cn_q_alfa \n")
+    ff.write(" # Time,   Mach,     alfa,     beta,     Cd,     CL_alfa,     Cn_p_alfa,     Cn_q_alfa \n")
     ff.close()
     #File to write moment coeff
     fm = open("./Resultados/Moment_coef.txt", "w")
@@ -80,7 +80,7 @@ def main():
     ff.close()
     # File to write moment - Body Frame
     fm = open("./Resultados/Moments.txt", "w")
-    fm.write("# Time,     alpha,      beta,     delta2,     p,      q,      r,    MX,     MY,     MZ \n")
+    fm.write("# Time,     alpha,      beta,     p,      q,      r,    MX,     MY,     MZ \n")
     fm.close()
 #---------------------------------------------
     # Convierto de deg->rad y de RPM->rad/s
@@ -155,7 +155,8 @@ def main():
     proce('./Resultados/Moment_coef.txt')
     proce('./Resultados/Moments.txt')
     plt_data.plot_data(N, t, x, phi, theta, psi)
-
+    plt_data.plot_force()
+    plt_data.plot_moments()
 
 
 if __name__ == "__main__":
