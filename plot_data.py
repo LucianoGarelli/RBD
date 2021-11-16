@@ -81,7 +81,7 @@ def plot_data(N, t, x, phi, theta, psi):
     if 1:
         fig, axs = plt.subplots(1, 3, figsize=fig_size)
         fig.canvas.set_window_title(u'Orientación en ángulos de Euler')
-        fig.suptitle(u'Orientación en ángulos de Euler')
+        fig.suptitle(u'Orientación en ángulos de Euler (Deg)')
         for k in range(3):
             axs[k].plot(t, euler_angles[:,k]*180/math.pi)
             axs[k].grid()
@@ -150,6 +150,7 @@ def plot_moments():
     for line in f:
         frags = line.split(',')
         xy = np.append(xy, [[float(frags[0])], [float(frags[6])], [float(frags[7])], [float(frags[8])]], axis=1)
+    xy = np.delete(xy, 0, axis=1)
     fig, axs = plt.subplots(1, 3, figsize=fig_size)
     fig.canvas.set_window_title('Moments')
 
