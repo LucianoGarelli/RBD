@@ -148,3 +148,8 @@ CASO S04
      paper Sahu: Caso 4 - AIAA 2007-6582 
      misma data.dat cambia cond lanz
 ######################################################
+CASO F01 
+     paper Theodoulis, Morel, Wernet: 
+     Caso 1 - AIAA 2009-6236 
+     ver coef en carlucci pg 268
+######################################################
