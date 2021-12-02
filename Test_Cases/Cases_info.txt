@@ -136,5 +136,20 @@ exCASO 11: Ejemplo Coeficiente de drag variable
 CASO TUERCA MARIPOSA
      representa el efecto Eje de inercia intermedio
 ######################################################
-
-
+CASO S02 
+     paper Sahu: Caso 2 - AIAA 2007-6582 
+     misma data.dat cambia cond lanz
+######################################################
+CASO S03
+     paper Sahu: Caso 3 - AIAA 2007-6582 
+     misma data.dat cambia cond lanz
+######################################################
+CASO S04 
+     paper Sahu: Caso 4 - AIAA 2007-6582 
+     misma data.dat cambia cond lanz
+######################################################
+CASO F01 
+     paper Theodoulis, Morel, Wernet: 
+     Caso 1 - AIAA 2009-6236 
+     ver coef en carlucci pg 268
+######################################################

@@ -66,7 +66,7 @@ def ED_cuaterniones(x, u, k, t):
     # --- Ecuaciones dinámicas ---#
 
     # Indica si las fuerzas y momentos se calculan en marco viento / marco cuerpo / marco ned
-    fuerzas_y_momentos_calculadas_en_marco_body = True
+    fuerzas_y_momentos_calculadas_en_marco_body = False
 
     # por si consideramos viento no nulo. Son las componentes del vector viento en el marco fijo.
     velWind_ned = np.zeros(3)
@@ -89,21 +89,20 @@ def ED_cuaterniones(x, u, k, t):
     sin_alfa_t = math.sqrt(((math.sin(beta)) ** 2 + (math.cos(beta)) ** 2 * (math.sin(alfa)) ** 2))
     alfa_t = math.asin(math.sqrt(((math.sin(beta)) ** 2 + (math.cos(beta)) ** 2 * (math.sin(alfa)) ** 2)))
 
+    ca = np.cos(alfa)
+    cb = np.cos(beta)
+    sa = np.sin(alfa)
+    sb = np.sin(beta)
+
+    mach = vt / c
+
     if fuerzas_y_momentos_calculadas_en_marco_body:
 
-        ca = np.cos(alfa)
-        cb = np.cos(beta)
-        sa = np.sin(alfa)
-        sb = np.sin(beta)
         # matriz de cambio de coordenadas, de marco wind a marco body
         W2B = np.array([[ca * cb, -ca * sb, -sa],
                         [sb, cb, 0],
                         [sa * cb, -sa * sb, ca]])
 
-        # Coeficientes aerodinamicos eje cuerpo, Sahu-Costello.
-        mach = vt/c
-        #Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa = force_coef(mach, alfa, beta)
-        #Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r = moment_coef(mach, alfa, beta)
         Cx0, Cx2, Cna = force_coef_body(mach)
         Cma, Cmq, Clp = moment_coef_body(mach)
 
@@ -138,15 +137,14 @@ def ED_cuaterniones(x, u, k, t):
         C_body[4] = qdy*S*diam*(Cma*w/vt + Cmq*(x[11] * diam / (2 * vt)))
         C_body[5] = qdy*S*diam*(-Cma*v/vt + Cmq*(x[12] * diam / (2 * vt)))
 
+        #
+        # ver g_body y NED_forces esto estaba en C_body
         # antes estaba abajo pero g_body lo pas'e arriba porque necesito para el Forces.txt
         g_body = Q_body2ned.T.dot([0,0,g]) #Q_body2ned[2,:] * g  # multiplico Q_body2ned.T (o sea, la inversa de Q_body2ned) por [0,0,g]^T
         NED_forces[0:3] = Q_body2ned.dot(C_body[0:3])
-        #aca escribir idem arriba pero con Coef[0], Coef[1],....., Coef[5]
 
         ff = open('./Resultados/Forces.txt', 'ab')
         f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2]])
-        #f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], F_Wind[0],F_Wind[1],F_Wind[2]])
-        #f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], NED_forces[0],NED_forces[1],NED_forces[2]])
         np.savetxt(ff, [f_force], delimiter=", ", fmt='%1.3e')
         ff.close()
 
@@ -155,16 +153,77 @@ def ED_cuaterniones(x, u, k, t):
         np.savetxt(fm, [m_moment], delimiter=", ", fmt='%1.3e')
         fm.close()
 
-        F_body = C_body[0:3]
-        M_body = C_body[3:6]
+        Forces = C_body[0:3]
+        Moments = C_body[3:6]
 
-        x_prima[3] = x[12] * x[4] - x[11] * x[5] + g_body[0] + F_body[0] / m
-        x_prima[4] = x[10] * x[5] - x[12] * x[3] + g_body[1] + F_body[1] / m
-        x_prima[5] = x[11] * x[3] - x[10] * x[4] + g_body[2] + F_body[2] / m
+        #aca escribir idem arriba pero con Coef[0], Coef[1],....., Coef[5]
+    else:
+        # Coeficientes aerodinamicos eje viento
+        Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa = force_coef(mach, alfa, beta)
+        Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r = moment_coef(mach, alfa, beta)
+        
+        ff = open('./Resultados/Force_coef.txt', 'ab')
+        f_coef = np.asarray([dt*(k +1),  mach, alfa, beta, Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa])
+        np.savetxt(ff, [f_coef], delimiter=", ", fmt='%1.3e')
+        ff.close()
 
-        # Lo siguiente es equivalente a hacer A\b en matlab en vez inv(A)*b (siempre conviene evitar calcular inversas)
-        x_prima[10:13] = sp.linalg.solve(inertia_tensor, np.cross(inertia_tensor.dot(x[10:13]), x[10:13]) + M_body, sym_pos=True)
-        # sym_pos indica que el tensor de inercia es simétrico y definido positivo, lo que acelera los cálculos
+        fm = open('./Resultados/Moment_coef.txt', 'ab')
+        m_coef = np.asarray([dt*(k+1), mach, alfa, beta, Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r])
+        np.savetxt(fm, [m_coef], delimiter=", ", fmt='%1.3e')
+        fm.close()
+            
+        # Calculo presión dinámica
+        qdy = 0.5 * rho * vt ** 2
+
+        ####################################
+        #Fuerzas en ejes viento
+        C_Wind = np.zeros(6)
+        NED_forces = np.zeros(6)
+        u = vel_rel_body[0]
+        v = vel_rel_body[1]
+        w = vel_rel_body[2]
+        C_Wind[0] = -qdy*S*Cd*ca*cb + qdy*S*CL_alfa*(sb**2 + sb**2 * cb**2 ) + 0
+        C_Wind[1] = -qdy*S*Cd*sb + qdy*S*CL_alfa*(-ca*sb*cb) + qdy*S*Cn_p_alfa*x[10]*(-sa*cb)
+        C_Wind[2] = -qdy*S*Cd*sa*cb + qdy*S*CL_alfa*(-sa*ca*cb**2) + qdy*S*Cn_p_alfa*x[10]*(sb)
+            
+        #####################################
+        #Momentos ejes viento
+        C_Wind[3] = 0 + 0 + qdy*S*diam*(diam/vt)*Clp*x[10] + 0 
+        # qt = sqrt(q^2 + r^2) McCoy pag.38 VER Cm_q y Cn_r
+        C_Wind[4] = qdy*S*diam*Cm_alfa*(sa*cb) + qdy*S*diam*(diam/vt)*Cm_p_alfa*(-sb) + 0 + qdy*S*diam*(diam/vt)*Cm_q * x[11]
+        C_Wind[5] = qdy*S*diam*Cm_alfa*(-sb) + qdy*S*diam*(diam/vt)*Cm_p_alfa*(-sa*cb) + 0 + qdy*S*diam*(diam/vt)*Cm_q * x[12]
+            
+        # ver como plantear la gravedad en ejes viento y eso de NED_forces
+        # g_body no lo cambié, la fórmula es similar al g_body
+        g_body = Q_body2ned.T.dot([0,0,g]) #Q_body2ned[2,:] * g  # multiplico Q_body2ned.T (o sea, la inversa de Q_body2ned) por [0,0,g]^T
+        #NED_forces[0:3] = Q_body2ned.dot(C_body[0:3])
+
+        ff = open('./Resultados/Forces.txt', 'ab')
+        f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_Wind[0],C_Wind[1],C_Wind[2]])
+        #f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], NED_forces[0],NED_forces[1],NED_forces[2]])
+        np.savetxt(ff, [f_force], delimiter=", ", fmt='%1.3e')
+        ff.close()
+
+        fm = open('./Resultados/Moments.txt', 'ab')
+        # modificar este para momentos wind
+        m_moment = np.asarray([dt*(k+1), alfad, betad, x[3], x[4], x[5], C_Wind[3], C_Wind[4], C_Wind[5]])
+        np.savetxt(fm, [m_moment], delimiter=", ", fmt='%1.3e')
+        fm.close()
+
+        Forces = C_Wind[0:3]
+        Moments = C_Wind[3:6]
+
+        #
+        # ver que hacemos con g_body y NED_forces, antes estaban arriba
+        #
+
+    x_prima[3] = x[12] * x[4] - x[11] * x[5] + g_body[0] + Forces[0] / m
+    x_prima[4] = x[10] * x[5] - x[12] * x[3] + g_body[1] + Forces[1] / m
+    x_prima[5] = x[11] * x[3] - x[10] * x[4] + g_body[2] + Forces[2] / m
+
+    # Lo siguiente es equivalente a hacer A\b en matlab en vez inv(A)*b (siempre conviene evitar calcular inversas)
+    x_prima[10:13] = sp.linalg.solve(inertia_tensor, np.cross(inertia_tensor.dot(x[10:13]), x[10:13]) + Moments, sym_pos=True)
+    # sym_pos indica que el tensor de inercia es simétrico y definido positivo, lo que acelera los cálculos
 
 
 
