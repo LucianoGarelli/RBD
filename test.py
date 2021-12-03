@@ -68,14 +68,14 @@ def main():
     ff.close()
     #File to write moment coeff
     fm = open("./Resultados/Moment_coef.txt", "w")
-    fm.write(" # Time,   Mach,     alfa,     beta,     delta2,     Clp,     Cm_alfa,     Cm_p_alfa,     Cm_q,     Cn_beta,"
+    fm.write(" # Time,   Mach,     alfa,     beta,     Clp,     Cm_alfa,     Cm_p_alfa,     Cm_q,     Cn_beta,"
              "     Cn_r \n")
     fm.close()
 
 # ---------------------------------------------
     # File to write forces - Body Frame
     ff = open("./Resultados/Forces.txt", "w")
-    ff.write("# Time,     alpha,     beta,     delta2,     V_inf,    u(v_body_X), v(v_body_Y), w(v_body_Z),  p, "
+    ff.write("# Time,     alpha,     beta,     V_inf,    u(v_body_X), v(v_body_Y), w(v_body_Z),  p, "
              "      q,         r,         gx,         gy,       gz,      FX_body,    FY_body,    FZ_body  \n")
     ff.close()
     # File to write moment - Body Frame

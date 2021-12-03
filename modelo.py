@@ -66,7 +66,7 @@ def ED_cuaterniones(x, u, k, t):
     # --- Ecuaciones dinámicas ---#
 
     # Indica si las fuerzas y momentos se calculan en marco viento / marco cuerpo / marco ned
-    fuerzas_y_momentos_calculadas_en_marco_body = False
+    fuerzas_y_momentos_calculadas_en_marco_body = True
 
     # por si consideramos viento no nulo. Son las componentes del vector viento en el marco fijo.
     velWind_ned = np.zeros(3)
@@ -84,6 +84,7 @@ def ED_cuaterniones(x, u, k, t):
     alfad = alfa * 180 / math.pi
     # ángulo de deslizamiento
     beta = np.arcsin(vel_rel_body[1] / vt)
+    betad = beta * 180 / math.pi
     betad = beta * 180 / math.pi
 
     sin_alfa_t = math.sqrt(((math.sin(beta)) ** 2 + (math.cos(beta)) ** 2 * (math.sin(alfa)) ** 2))

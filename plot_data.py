@@ -85,9 +85,9 @@ def plot_data(N, t, x, phi, theta, psi):
         for k in range(3):
             axs[k].plot(t, euler_angles[:,k]*180/math.pi)
             axs[k].grid()
-        axs[0].set_title('roll')
-        axs[1].set_title('pitch')
-        axs[2].set_title('yaw')
+        axs[0].set_title('roll (phi)')
+        axs[1].set_title('pitch (theta)')
+        axs[2].set_title('yaw (psi)')
 
     if 0:
         #Read results from McCox Fig. 9.2
