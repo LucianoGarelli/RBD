@@ -66,7 +66,7 @@ def ED_cuaterniones(x, u, k, t):
     # --- Ecuaciones dinámicas ---#
 
     # Indica si las fuerzas y momentos se calculan en marco viento / marco cuerpo / marco ned
-    fuerzas_y_momentos_calculadas_en_marco_body = False
+    fuerzas_y_momentos_calculadas_en_marco_body = True
 
     # por si consideramos viento no nulo. Son las componentes del vector viento en el marco fijo.
     velWind_ned = np.zeros(3)
@@ -103,8 +103,8 @@ def ED_cuaterniones(x, u, k, t):
                         [sb, cb, 0],
                         [sa * cb, -sa * sb, ca]])
 
-        Cx0, Cx2, Cna = force_coef_body(mach)
-        Cma, Cmq, Clp = moment_coef_body(mach)
+        Cx0, Cx2, Cna, Cypa = force_coef_body(mach,alfa,beta)
+        Cma, Cmq, Clp, Cnpa = moment_coef_body(mach,alfa,beta)
 
         ff = open('./Resultados/Force_coef.txt', 'ab')
         f_coef = np.asarray([dt*(k +1),  mach, alfa, beta, Cx0, Cx2, Cna])

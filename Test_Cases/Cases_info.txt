@@ -153,3 +153,11 @@ CASO F01
      Caso 1 - AIAA 2009-6236 
      ver coef en carlucci pg 268
 ######################################################
+CASO E01
+     paper egipcio M107
+######################################################     
+CASO N01 - NorthWest Univ
+     completar segun tesis o papper
+######################################################     
+CASO Baranowski 2013
+     ver paaer, hay dos lanzamientos, generar data e inital cond

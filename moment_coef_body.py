@@ -1,15 +1,57 @@
 import math as math
 import numpy as np
 from scipy import interpolate
+import globals
+from procesar_magnus_moment_coef import procesar_magnus_moment_coef
 
-def moment_coef_body(mach):
-
-#Spark data
+def moment_coef_body(mach,alfa,beta):
+    
+    #Spark data
     #Cma = -12.6
     #Cmq = -196
     #Clp = -2.71
-#Estimation CFD/RBD
+    #Estimation CFD/RBD
     Cma = -13.8278
     Cmq = -134.4
     Clp = -3.379
-    return [Cma, Cmq, Clp]
+    Cnpa = 0.0
+
+    if globals.Moments_coef_from_txt:
+        if not globals.Moments_coef_readed:
+            #data = np.loadtxt('Resu_ref/body_coef_txt/bc_baranwonski.txt', delimiter=',', skiprows=3)
+            data = np.loadtxt('Resu_ref/body_coef_txt/bc_egipcio.txt', delimiter=',', skiprows=3)
+            #data = np.loadtxt('Resu_ref/body_coef_txt/bc_NWU_104pg.txt', delimiter=',', skiprows=3)
+
+            globals.data = data
+
+            globals.Moments_coef_readed = True
+            procesar_magnus_moment_coef()
+
+        M = globals.data[:,0]
+            
+        # overturning also known as pitch yaw moment
+        Cma_exp = globals.data[:,6]
+        Cma = np.interp(mach, M, Cma_exp)
+
+        # rolling damping
+        Clp_exp = globals.data[:,5]
+        Clp = 2*np.interp(mach, M, Clp_exp)
+        # checkiar el 2
+
+        # pitch yaw damping
+        Cmq_exp = globals.data[:,7]
+        Cmq = np.interp(mach, M, Cmq_exp)
+
+        # magnus, tabla de doble entrada
+        #
+        # Como lo tratamos ?
+        # incorporamos globals.Cnpa_proce en globals, hay que ver si lo dejamos o lo sacamos
+
+        alfa_total2 = ((math.sin(beta))**2 + (math.cos(beta))**2*(math.sin(alfa))**2)
+        alfa_total = np.sqrt(alfa_total2)
+        Cnpa = interpolate.griddata((globals.Mpa,globals.ang),globals.Cnpa_proce,(mach,alfa_total),method='linear')  # va alfa_total ac'a ??
+        #Cm_p_alfa = -1*interpolate.griddata((Mpa,alfa_mp),Cm_p_alfa_exp,(mach,alfa_total2),method='linear')
+
+
+
+    return [Cma, Cmq, Clp, Cnpa]

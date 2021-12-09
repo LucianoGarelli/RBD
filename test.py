@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import modelo
 import utiles
 import conservation as cons
+import os
 
 from parameters import parameters
 from fluid_prop import fluid_prop
@@ -18,7 +19,7 @@ import plot_data as plt_data
 import save_data as sv
 from proce import proce
 
-import os
+
 def main():
 
     print '#########################'
@@ -72,7 +73,7 @@ def main():
              "     Cn_r \n")
     fm.close()
 
-# ---------------------------------------------
+    # ---------------------------------------------
     # File to write forces - Body Frame
     ff = open("./Resultados/Forces.txt", "w")
     ff.write("# Time,     alpha,     beta,     delta2,     V_inf,    u(v_body_X), v(v_body_Y), w(v_body_Z),  p, "
@@ -82,7 +83,8 @@ def main():
     fm = open("./Resultados/Moments.txt", "w")
     fm.write("# Time,     alpha,      beta,     p,      q,      r,    MX,     MY,     MZ \n")
     fm.close()
-#---------------------------------------------
+    #---------------------------------------------
+    
     # Convierto de deg->rad y de RPM->rad/s
     alfa = np.deg2rad(alfa)
     beta = np.deg2rad(beta)
@@ -117,7 +119,7 @@ def main():
 
     for k in range(N):
         x[k + 1] = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k], k, _t), x[k], [k*Ts, (k+1)*Ts],
-                                       rtol=1e-12, atol=1e-12)[-1]
+                                       rtol=1e-5, atol=1e-5)[-1]
 
         #output = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k], k, _t), x[k], [k * Ts, (k + 1) * Ts],
         #                               rtol=1e-12, atol=1e-12, full_output=True)
