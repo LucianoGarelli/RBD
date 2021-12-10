@@ -11,10 +11,12 @@ def moment_coef_body(mach):
         #Cma = -12.6
         #Cmq = -196
         #Clp = -2.71
+        #Cnpa = 0
 #Estimation CFD/RBD
         Cma = -13.8278
         Cmq = -134.4
         Clp = -3.379
+        Cnpa = 00
 ##########################
 #Stahl-Costello-Sahu AIAA 2009-5715
 #Synthetic
@@ -22,5 +24,6 @@ def moment_coef_body(mach):
         Cma = -8.9
         Cmq = -198
         Clp = -2.6
+        Cnpa = 0
 
-    return [Cma, Cmq, Clp]
+    return [Cma, Cmq, Clp, Cnpa]
