@@ -127,15 +127,15 @@ def ED_cuaterniones(x, u, k, t):
         v = vel_rel_body[1]
         w = vel_rel_body[2]
         C_body[0] = -qdy*S*(Cx0 + Cx2*(v**2 + w**2)/vt**2)
-        C_body[1] = -qdy*S*(Cna*v/vt)
-        C_body[2] = -qdy*S*(Cna*w/vt)
+        C_body[1] = -qdy*S*(Cna*v/vt - Cypa*(x[10] * diam / (2 * vt))*(w/vt))
+        C_body[2] = -qdy*S*(Cna*w/vt + Cypa*(x[10] * diam / (2 * vt))*(v/vt))
 
         #####################################
         #Momentos ejes cuerpo
         C_body[3] = qdy*S*diam*(x[10] * diam / (2 * vt)) * Clp
         # qt = sqrt(q^2 + r^2) McCoy pag.38 VER Cm_q y Cn_r
-        C_body[4] = qdy*S*diam*(Cma*w/vt + Cmq*(x[11] * diam / (2 * vt)))
-        C_body[5] = qdy*S*diam*(-Cma*v/vt + Cmq*(x[12] * diam / (2 * vt)))
+        C_body[4] = qdy*S*diam*(Cma*w/vt + Cmq*(x[11] * diam / (2 * vt)) + Cnpa*(x[10] * diam / (2 * vt))*(v/vt))
+        C_body[5] = qdy*S*diam*(-Cma*v/vt + Cmq*(x[12] * diam / (2 * vt)) + Cnpa*(x[10] * diam / (2 * vt))*(w/vt))
 
         #
         # ver g_body y NED_forces esto estaba en C_body
