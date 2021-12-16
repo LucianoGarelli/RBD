@@ -151,13 +151,21 @@ CASO S04
 CASO F01 
      paper Theodoulis, Morel, Wernet: 
      Caso 1 - AIAA 2009-6236 
-     ver coef en carlucci pg 268
+     tomamos coef egipcio, ver coef en carlucci pg 268
+     ojo, usa coef en ejes vientos
 ######################################################
 CASO E01
      paper egipcio M107
 ######################################################     
-CASO N01 - NorthWest Univ
-     completar segun tesis o papper
+CASO NW02~NW12 - NorthWest Univ May2019, tesis 127 pgs
+     NW02~NW03 - spin-stabilized, pg 48(tesis), 66 pdf
+     NW04~NW06 - Casos aletas, pg 57(tesis), 75 pdf
+     NW07~NW12 - Casos M107, pg 64(tesis), 82 pdf, falta Cnpa
 ######################################################     
+CASO NW13 - NorthWest Univ Jul2019, tesis 104 pgs
+     lanzamiento pg 66 tesis, 76 pdf
+     coef pg 67 tesis, 77 pdf
+     check angles lanz
+######################################################
 CASO Baranowski 2013
      ver paaer, hay dos lanzamientos, generar data e inital cond
