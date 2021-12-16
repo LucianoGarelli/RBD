@@ -4,16 +4,10 @@ import globals
 def procesar_magnus_moment_coef():
     # colocar en el vecto n_magnus los distintos 'angulos que se disponen de coeficientes
 
-    # cant de angulos que se evaluan los coef
-    n_magnus = [0.0, 2.0, 5.0, 10.0] # egipcio.txt
-    #n_magnus = [0.0, 1.0, 2.0, 3.0, 5.0, 10.0, 20.0] # bc_baranwonski
-    #n_magnus = [1] # NWU_104pg
-    n = np.size(n_magnus)
-    
-    #data = np.loadtxt('./bc_NWU_104pg.txt', delimiter=',', skiprows=3)
-    #data = np.loadtxt('./delete_bc_baranwonski.txt', delimiter=',', skiprows=3)
-    #data = np.loadtxt('./delete_bc_egipcio.txt', delimiter=',', skiprows=3)
     [rows,cols] = np.shape(globals.data)
+
+    n = cols - 8
+    n_magnus = globals.data [rows-1,8:8+n]
     tot = rows*n
     M_0 = globals.data[:,0]
 
