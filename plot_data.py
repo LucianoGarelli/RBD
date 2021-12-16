@@ -106,6 +106,30 @@ def plot_data(N, t, x, phi, theta, psi):
         axs.set_ylim(-2, 2)
         axs.grid(True)
 
+    if 1:
+        fig, axs = plt.subplots(1, 3, figsize=fig_size)
+        fig.canvas.set_window_title('Angulos ataque, deslizamiento y total')
+        fig.suptitle('Angulos')
+        vt = np.linalg.norm(velocidad_ned, axis=1)
+        # ángulo de ataque
+        alfa = np.arctan2(x[:, 5], x[:, 3])
+        alfad = alfa * 180 / math.pi
+        axs[0].plot(t, alfad)
+        axs[0].grid()
+        # ángulo de deslizamiento
+        beta = np.arcsin(x[:, 4]/vt)
+        betad = beta * 180 / math.pi
+        axs[1].plot(t, betad)
+        axs[1].grid()
+        sin_alfa_t = np.sqrt(((np.sin(beta)) ** 2 + (np.cos(beta)) ** 2 * (np.sin(alfa)) ** 2))
+        alfa_t = np.arcsin(sin_alfa_t)
+        alfa_t_d = alfa_t * 180 / math.pi
+        axs[2].plot(t, alfa_t_d)
+        axs[2].grid()
+        axs[0].set_title('Alpha')
+        axs[1].set_title('Beta')
+        axs[2].set_title('Alpha total')
+
     plt.show(block=False)
 
     #plt.show()

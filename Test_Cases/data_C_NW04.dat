@@ -1,0 +1,7 @@
+Lista de datos proyectil
+masa 4.4
+diam 0.0813
+xcg XXXX ycg 0.0 zcg 0.0
+Ixx 0.0034 Iyy 0.0267 Izz 0.0267
+steps 100000
+dt 0.000374
