@@ -31,11 +31,11 @@ def moment_coef_body(mach,alfa,beta):
             
         # overturning also known as pitch yaw moment
         Cma_exp = globals.data[:,6]
-        Cma = np.interp(mach, M, Cma_exp)
+        Cma = -1*np.interp(mach, M, Cma_exp)
 
         # rolling damping
         Clp_exp = globals.data[:,5]
-        Clp = 2*np.interp(mach, M, Clp_exp)
+        Clp = np.interp(mach, M, Clp_exp)
         # checkiar el 2
 
         # pitch yaw damping

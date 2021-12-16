@@ -116,10 +116,10 @@ def main():
     x = np.zeros((N+1,13))
     x[0] = x0
     u = np.zeros((N,4))  # tomo 4 aciones de control, por ejemplo. El control correspondiente a u[k] se mantiene constante desde el instante k*Ts hasta el instante (k+1)*Ts
-
+    t = np.arange(0, N+1) * Ts
     for k in range(N):
         x[k + 1] = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k], k, _t), x[k], [k*Ts, (k+1)*Ts],
-                                       rtol=1e-5, atol=1e-5)[-1]
+                                       rtol=1e-6, atol=1e-6)[-1]
 
         #output = sp.integrate.odeint(lambda _x, _t: modelo.ED_cuaterniones(_x, u[k], k, _t), x[k], [k * Ts, (k + 1) * Ts],
         #                               rtol=1e-12, atol=1e-12, full_output=True)
@@ -134,8 +134,10 @@ def main():
         #15 yardas
         #if solucion[1,0] >= 13.7:
             break
-
-    t = np.arange(0, N+1) * Ts
+        if (k % 500) == 0:
+            sv.save_data(N,t,x,Ixx,Iyy,Izz)
+            proce('./Resultados/Forces.txt')
+            proce('./Resultados/Moments.txt')
 
 
     print '#########################'

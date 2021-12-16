@@ -17,8 +17,7 @@ from fluid_prop import fluid_prop
 
 
 m, diam, xcg, ycg, zcg, Ixx, Iyy, Izz, steps, dt = parameters('./Data/data.dat')
-# Propiedades fluido
-rho, mu , c = fluid_prop(0, 0)
+
 g= 9.81  # aceleración de la gravedad
 
 inertia_tensor = np.array([[Ixx, 0., 0.],  # el tensor de inercia en el marco body
@@ -63,6 +62,8 @@ def ED_cuaterniones(x, u, k, t):
     x_prima[6] = q_prima.d
     x_prima[7:10] = q_prima.v
 
+    # Propiedades fluido
+    rho, mu, c = fluid_prop(x[2], 0)
     # --- Ecuaciones dinámicas ---#
 
     # Indica si las fuerzas y momentos se calculan en marco viento / marco cuerpo / marco ned
