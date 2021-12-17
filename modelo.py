@@ -113,7 +113,7 @@ def ED_cuaterniones(x, u, k, t):
         ff.close()
 
         fm = open('./Resultados/Moment_coef.txt', 'ab')
-        m_coef = np.asarray([dt*(k+1), mach, alfa, beta, Cma, Cmq, Clp])
+        m_coef = np.asarray([dt*(k+1), mach, alfa, beta, Cma, Cmq, Clp, Cnpa])
         np.savetxt(fm, [m_coef], delimiter=", ", fmt='%1.3e')
         fm.close()
 
