@@ -7,7 +7,7 @@ from procesar_magnus_moment_coef import procesar_magnus_moment_coef
 def moment_coef_body(mach,alfa,beta):
 
 ############################
-    if 1:
+    if 0:
 # Costello-Sahu AIAA 2007-6582
 #Spark data
         #Cma = -12.6
@@ -18,7 +18,7 @@ def moment_coef_body(mach,alfa,beta):
         Cma = -13.8278
         Cmq = -134.4
         Clp = -3.379
-        Cnpa = 00
+        Cnpa = 0.0
 ##########################
 #Stahl-Costello-Sahu AIAA 2009-5715
 #Synthetic
