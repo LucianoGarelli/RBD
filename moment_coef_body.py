@@ -4,7 +4,7 @@ from scipy import interpolate
 import globals
 from procesar_magnus_moment_coef import procesar_magnus_moment_coef
 
-def moment_coef_body(mach):
+def moment_coef_body(mach,alfa,beta):
 
 ############################
     if 1:
@@ -32,11 +32,11 @@ def moment_coef_body(mach):
     if globals.Moments_coef_from_txt:
         if not globals.Moments_coef_readed:
             #data = np.loadtxt('Resu_ref/body_coef_txt/bc_baranwonski.txt', delimiter=',', skiprows=3)
-            data = np.loadtxt('Resu_ref/body_coef_txt/bc_egipcio.txt', delimiter=',', skiprows=3)
+            data_raw = np.loadtxt('Resu_ref/body_coef_txt/bc_egipcio.txt', delimiter=',', skiprows=3)
             #data = np.loadtxt('Resu_ref/body_coef_txt/bc_NWU_104pg.txt', delimiter=',', skiprows=3)
-
+            data = data_raw[0:-1]
             globals.data = data
-
+            globals.data_raw = data_raw
             globals.Moments_coef_readed = True
             procesar_magnus_moment_coef()
 

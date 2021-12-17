@@ -7,7 +7,8 @@ def procesar_magnus_moment_coef():
     [rows,cols] = np.shape(globals.data)
 
     n = cols - 8
-    n_magnus = globals.data [rows-1,8:8+n]
+    n_magnus = globals.data[0:rows,8:8+n]
+    magnus_ang = globals.data_raw[rows,8:8+n]
     tot = rows*n
     M_0 = globals.data[:,0]
 
@@ -15,7 +16,7 @@ def procesar_magnus_moment_coef():
     # Mach para doble interpolaci'on
     globals.Mpa = np.zeros(tot)
     for i in range(rows):
-        for k in range(np.size(n_magnus)):
+        for k in range(n):
             globals.Mpa[i*n+k] = M_0[i]
         print('globals.Mpa')
         print(globals.Mpa)
@@ -25,7 +26,7 @@ def procesar_magnus_moment_coef():
     # angulos de magnus
     globals.ang = []
     for ii in range(rows):
-        globals.ang = np.append(globals.ang,n_magnus)
+        globals.ang = np.append(globals.ang,magnus_ang)
     print('globals.ang')
     print(globals.ang)
     print(np.shape(globals.ang))
@@ -34,7 +35,7 @@ def procesar_magnus_moment_coef():
     # Cnpa
     globals.Cnpa_proce = np.zeros(tot)
     for i in range(rows):
-        for k in range(np.size(n_magnus)):
+        for k in range(n):
             globals.Cnpa_proce[i*n+k] = globals.data[i,k+8]
     print('globals.Cnpa_proce')
     print(globals.Cnpa_proce)

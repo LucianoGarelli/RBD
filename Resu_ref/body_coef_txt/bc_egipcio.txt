@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 BODY COEF,Paper Egipcios ASAT-13-FM-03,,,,,,,,,,
 M,Ca,Cad2,Cna,Cypa,Clp,Cma,Cmq,Cnpa,,,
 ,,,,,,,,0,2,5,10

@@ -34,11 +34,11 @@ def force_coef_body(mach,alfa,beta):
     if globals.Forces_coef_from_txt:
         if not globals.Forces_coef_readed:
             #data = np.loadtxt('Resu_ref/body_coef_txt/bc_baranwonski.txt', delimiter=',', skiprows=3)
-            data = np.loadtxt('Resu_ref/body_coef_txt/bc_egipcio.txt', delimiter=',', skiprows=3)
+            data_raw = np.loadtxt('Resu_ref/body_coef_txt/bc_egipcio.txt', delimiter=',', skiprows=3)
             #data = np.loadtxt('Resu_ref/body_coef_txt/bc_NWU_104pg.txt', delimiter=',', skiprows=3)
-
+            data = data_raw[0:-1]
             globals.data = data
-
+            globals.data_raw = data_raw
             globals.Forces_coef_readed = True
 
         M = globals.data[:,0]
