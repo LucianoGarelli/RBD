@@ -8,7 +8,8 @@ def procesar_magnus_moment_coef():
 
     n = cols - 8
     n_magnus = globals.data[0:rows,8:8+n]
-    magnus_ang = globals.data_raw[rows,8:8+n]
+    #Convert deg to rad
+    magnus_ang = globals.data_raw[rows,8:8+n]*np.pi/180
     tot = rows*n
     M_0 = globals.data[:,0]
 

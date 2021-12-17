@@ -67,7 +67,7 @@ def ED_cuaterniones(x, u, k, t):
     # --- Ecuaciones dinámicas ---#
 
     # Indica si las fuerzas y momentos se calculan en marco viento / marco cuerpo / marco ned
-    fuerzas_y_momentos_calculadas_en_marco_body = True
+    fuerzas_y_momentos_calculadas_en_marco_body = False
 
     # por si consideramos viento no nulo. Son las componentes del vector viento en el marco fijo.
     velWind_ned = np.zeros(3)
@@ -84,7 +84,8 @@ def ED_cuaterniones(x, u, k, t):
     alfa = np.arctan2(vel_rel_body[2], vel_rel_body[0])
     alfad = alfa * 180 / math.pi
     # ángulo de deslizamiento
-    beta = np.arcsin(vel_rel_body[1] / vt)
+    #beta = np.arcsin(vel_rel_body[1] / vt)
+    beta = np.arctan2(vel_rel_body[1], np.sqrt(vel_rel_body[0]**2 + vel_rel_body[2]**2))
     betad = beta * 180 / math.pi
 
     sin_alfa_t = math.sqrt(((math.sin(beta)) ** 2 + (math.cos(beta)) ** 2 * (math.sin(alfa)) ** 2))
@@ -183,16 +184,16 @@ def ED_cuaterniones(x, u, k, t):
         u = vel_rel_body[0]
         v = vel_rel_body[1]
         w = vel_rel_body[2]
-        C_Wind[0] = -qdy*S*Cd*ca*cb + qdy*S*CL_alfa*(sb**2 + sb**2 * cb**2 ) + 0
-        C_Wind[1] = -qdy*S*Cd*sb + qdy*S*CL_alfa*(-ca*sb*cb) + qdy*S*Cn_p_alfa*x[10]*(-sa*cb)
-        C_Wind[2] = -qdy*S*Cd*sa*cb + qdy*S*CL_alfa*(-sa*ca*cb**2) + qdy*S*Cn_p_alfa*x[10]*(sb)
+        C_Wind[0] = -qdy*S*(Cd*ca*cb + CL_alfa*(sb**2 + sb**2 * cb**2) )
+        C_Wind[1] = -qdy*S*(Cd*sb + CL_alfa*(-ca*sb*cb) + Cn_p_alfa*x[10]*diam*(-sa*cb)/vt )
+        C_Wind[2] = -qdy*S*(Cd*sa*cb + CL_alfa*(-sa*ca*cb**2) + Cn_p_alfa*x[10]*diam*sb/vt)
             
         #####################################
         #Momentos ejes viento
-        C_Wind[3] = 0 + 0 + qdy*S*diam*(diam/vt)*Clp*x[10] + 0 
+        C_Wind[3] = qdy*S*diam*(x[10]*diam/vt)*Clp/2
         # qt = sqrt(q^2 + r^2) McCoy pag.38 VER Cm_q y Cn_r
-        C_Wind[4] = qdy*S*diam*Cm_alfa*(sa*cb) + qdy*S*diam*(diam/vt)*Cm_p_alfa*(-sb) + 0 + qdy*S*diam*(diam/vt)*Cm_q * x[11]
-        C_Wind[5] = qdy*S*diam*Cm_alfa*(-sb) + qdy*S*diam*(diam/vt)*Cm_p_alfa*(-sa*cb) + 0 + qdy*S*diam*(diam/vt)*Cm_q * x[12]
+        C_Wind[4] = qdy*S*diam*(Cm_alfa*(sa*cb)/2 - (x[10]*diam/vt)*Cm_p_alfa*(-sb) +  (diam/vt)*Cm_q * x[11])
+        C_Wind[5] = qdy*S*diam*(Cm_alfa*(-sb)/2 - (x[10]*diam/vt)*Cm_p_alfa*(-sa*cb) + (diam/vt)*Cm_q * x[12])
             
         # ver como plantear la gravedad en ejes viento y eso de NED_forces
         # g_body no lo cambié, la fórmula es similar al g_body

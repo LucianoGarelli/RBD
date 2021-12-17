@@ -1,5 +1,6 @@
 import math as math
 import numpy as np
+import globals
 
 def force_coef(mach, alfa, beta):
 
@@ -55,5 +56,36 @@ def force_coef(mach, alfa, beta):
 
         # Cn_q + Cn_alfa -> Pitching damping debido a q + dot(alfa)
         Cn_q_alfa = -0*0.003
+
+    if globals.Forces_coef_from_txt:
+        if not globals.Forces_coef_readed:
+            # data = np.loadtxt('Resu_ref/body_coef_txt/bc_baranwonski.txt', delimiter=',', skiprows=3)
+            data_raw = np.loadtxt('Resu_ref/body_coef_txt/bc_egipcio.txt', delimiter=',', skiprows=3)
+            # data = np.loadtxt('Resu_ref/body_coef_txt/bc_NWU_104pg.txt', delimiter=',', skiprows=3)
+            data = data_raw[0:-1]
+            globals.data = data
+            globals.data_raw = data_raw
+            globals.Forces_coef_readed = True
+
+        M = globals.data[:, 0]
+
+        # Drag
+        Cd0_exp = globals.data[:, 1]
+        Cd0 = np.interp(mach, M, Cd0_exp)
+
+        Cd2_exp = globals.data[:, 2]
+        Cd2 = np.interp(mach, M, Cd2_exp)
+
+        alfa_total2 = ((math.sin(beta)) ** 2 + (math.cos(beta)) ** 2 * (math.sin(alfa)) ** 2)
+        Cd = Cd0 + Cd2 * alfa_total2
+
+        # Lift
+        CL_alfa_exp = globals.data[:, 3]
+        CL_alfa = np.interp(mach, M, CL_alfa_exp)
+
+        # Magnus
+        Cn_p_alfa_exp = globals.data[:, 4]
+        Cn_p_alfa = np.interp(mach, M, Cn_p_alfa_exp)
+        Cn_q_alfa = 0
 
     return [Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa]  # ac'a los toma separados? a los ultimos 2
