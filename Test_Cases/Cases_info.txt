@@ -149,8 +149,8 @@ CASO S04
      misma data.dat cambia cond lanz
 ######################################################
 CASO F01 
-     paper Theodoulis, Morel, Wernet: 
-     Caso 1 - AIAA 2009-6236 
+     paper Wernet, Theodoulis, Morel: 
+     Caso 1 - AIAA 2010-7640
      tomamos coef egipcio, ver coef en carlucci pg 268
      ojo, usa coef en ejes vientos
 ######################################################
