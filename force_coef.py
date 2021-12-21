@@ -85,7 +85,9 @@ def force_coef(mach, alfa, beta):
 
         # Magnus
         Cn_p_alfa_exp = globals.data[:, 4]
-        Cn_p_alfa = np.interp(mach, M, Cn_p_alfa_exp)
+        Cn_p_alfa = np.interp(mach, M, Cn_p_alfa_exp)/2
+        # BRL = NACA/2
+        
         Cn_q_alfa = 0
 
     return [Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa]  # ac'a los toma separados? a los ultimos 2
