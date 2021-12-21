@@ -192,8 +192,8 @@ def ED_cuaterniones(x, u, k, t):
         #Momentos ejes viento
         C_Wind[3] = qdy*S*diam*(x[10]*diam/vt)*Clp/2
         # qt = sqrt(q^2 + r^2) McCoy pag.38 VER Cm_q y Cn_r
-        C_Wind[4] = qdy*S*diam*(Cm_alfa*(sa*cb)/2 - (x[10]*diam/vt)*Cm_p_alfa*(-sb) +  (diam/vt)*Cm_q * x[11])
-        C_Wind[5] = qdy*S*diam*(Cm_alfa*(-sb)/2 - (x[10]*diam/vt)*Cm_p_alfa*(-sa*cb) + (diam/vt)*Cm_q * x[12])
+        C_Wind[4] = qdy*S*diam*(Cm_alfa*(sa*cb) - (x[10]*diam/vt)*Cm_p_alfa*(-sb) +  (diam/vt)*Cm_q * x[11])
+        C_Wind[5] = qdy*S*diam*(Cm_alfa*(-sb) - (x[10]*diam/vt)*Cm_p_alfa*(-sa*cb) + (diam/vt)*Cm_q * x[12])
             
         # ver como plantear la gravedad en ejes viento y eso de NED_forces
         # g_body no lo cambié, la fórmula es similar al g_body
