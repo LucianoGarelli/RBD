@@ -1,5 +1,6 @@
 # funci'on de prueba para procesar magnus coef (momento)
 import numpy as np
+from scipy import interpolate
 import globals
 def procesar_magnus_moment_coef():
     # colocar en el vecto n_magnus los distintos 'angulos que se disponen de coeficientes
@@ -19,9 +20,9 @@ def procesar_magnus_moment_coef():
     for i in range(rows):
         for k in range(n):
             globals.Mpa[i*n+k] = M_0[i]
-        print('globals.Mpa')
-        print(globals.Mpa)
-        print(np.shape(globals.Mpa))
+    print('globals.Mpa')
+    print(globals.Mpa)
+    print(np.shape(globals.Mpa))
 
 
     # angulos de magnus
@@ -42,5 +43,11 @@ def procesar_magnus_moment_coef():
     print(globals.Cnpa_proce)
     print(np.shape(globals.Cnpa_proce))
 
+    #interp2d option
+    #globals.interp = interpolate.interp2d(globals.Mpa, globals.ang, globals.Cnpa_proce)
 
+    #RectBivariateSpline option
+    n = np.shape(globals.Mpa[0::4])
+    m =  np.shape(globals.ang[0:4])
+    globals.interp = interpolate.RectBivariateSpline(globals.Mpa[0::4], globals.ang[0:4], np.reshape(np.asarray(globals.Cnpa_proce),(n[0],m[0])))
     return []

@@ -6,6 +6,7 @@ global data
 global Mpa
 global ang
 global Cnpa_proce
+global interp
 
 Forces_coef_from_txt = True
 Forces_coef_readed = False
