@@ -95,7 +95,7 @@ def moment_coef(mach,alfa,beta):
 
         # pitch yaw damping
         Cmq_exp = globals.data[:, 7]
-        Cm_q = np.interp(mach, M, Cmq_exp)/2
+        Cm_q = np.interp(mach, M, Cmq_exp)
         # BRL = NACA/2
         # magnus, tabla de doble entrada
         #
@@ -104,8 +104,9 @@ def moment_coef(mach,alfa,beta):
 
         alfa_total2 = ((math.sin(beta)) ** 2 + (math.cos(beta)) ** 2 * (math.sin(alfa)) ** 2)
         alfa_total = np.sqrt(alfa_total2)
-        Cm_p_alfa = interpolate.griddata((globals.Mpa, globals.ang), globals.Cnpa_proce, (mach, alfa_total),
-                                    method='linear')/2  # va alfa_total ac'a ??
+        #Cm_p_alfa = interpolate.griddata((globals.Mpa, globals.ang), globals.Cnpa_proce, (mach, alfa_total),
+        #                            method='linear')
+        Cm_p_alfa = globals.interp(mach, alfa_total)
         # BRL = NACA/2
         # Cm_p_alfa = -1*interpolate.griddata((Mpa,alfa_mp),Cm_p_alfa_exp,(mach,alfa_total2),method='linear')
 
