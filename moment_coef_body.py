@@ -62,9 +62,9 @@ def moment_coef_body(mach,alfa,beta):
 
         alfa_total2 = ((math.sin(beta))**2 + (math.cos(beta))**2*(math.sin(alfa))**2)
         alfa_total = np.sqrt(alfa_total2)
-        Cnpa = interpolate.griddata((globals.Mpa,globals.ang),globals.Cnpa_proce,(mach,alfa_total),method='linear')  # va alfa_total ac'a ??
+        #Cnpa = interpolate.griddata((globals.Mpa,globals.ang),globals.Cnpa_proce,(mach,alfa_total),method='linear')  # va alfa_total ac'a ??
         #Cm_p_alfa = -1*interpolate.griddata((Mpa,alfa_mp),Cm_p_alfa_exp,(mach,alfa_total2),method='linear')
-
+        Cnpa = globals.interp(mach, alfa_total)
 
 
     return [Cma, Cmq, Clp, Cnpa]
