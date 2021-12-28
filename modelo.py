@@ -58,7 +58,8 @@ def ED_cuaterniones(x, u, k, t):
     x_prima[0:3] = Q_body2ned.dot(x[3:6])  # paso la velocidad de body[3:6] a ned[0:3]
     x_prima[2] *= -1. # para tener altura en vez de "profundidad"
 
-    q_prima = q_body2ned.mult_cuat_times_vec(x[10:13]*.5)
+    #q_prima = q_body2ned.mult_cuat_times_vec(x[10:13]*.5)
+    q_prima = q_body2ned.mult_cuat_times_vec(np.array([0,x[11],x[12]]) * .5)
     x_prima[6] = q_prima.d
     x_prima[7:10] = q_prima.v
 
@@ -219,12 +220,18 @@ def ED_cuaterniones(x, u, k, t):
         # ver que hacemos con g_body y NED_forces, antes estaban arriba
         #
 
-    x_prima[3] = x[12] * x[4] - x[11] * x[5] + g_body[0] + Forces[0] / m
-    x_prima[4] = x[10] * x[5] - x[12] * x[3] + g_body[1] + Forces[1] / m
-    x_prima[5] = x[11] * x[3] - x[10] * x[4] + g_body[2] + Forces[2] / m
+    #quat = utiles.Quaternion(x[6], x[7:10])
+    [phi,theta, psi] = q_body2ned.get_euler_anles()
+
+    x_prima[3] = x[12] * x[4] - x[11] * x[5]  - g*np.sin(theta) + Forces[0] / m
+    x_prima[4] = -x[12]*np.tan(theta) * x[5] - x[12] * x[3] + 0 + Forces[1] / m
+    x_prima[5] = x[11] * x[3] + x[12]*np.tan(theta) * x[4] + g*np.cos(theta) + Forces[2] / m
+
 
     # Lo siguiente es equivalente a hacer A\b en matlab en vez inv(A)*b (siempre conviene evitar calcular inversas)
-    x_prima[10:13] = sp.linalg.solve(inertia_tensor, np.cross(inertia_tensor.dot(x[10:13]), x[10:13]) + Moments, sym_pos=True)
+    x_prima[10:13] = sp.linalg.solve(inertia_tensor, np.cross(inertia_tensor.dot(x[10:13]),
+                                                              np.array([-x[12]*np.tan(theta),x[11],x[12]]))
+                                     + Moments, sym_pos=True)
     # sym_pos indica que el tensor de inercia es simétrico y definido positivo, lo que acelera los cálculos
 
 
