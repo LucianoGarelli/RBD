@@ -59,7 +59,9 @@ def ED_cuaterniones(x, u, k, t):
     x_prima[2] *= -1. # para tener altura en vez de "profundidad"
 
     #q_prima = q_body2ned.mult_cuat_times_vec(x[10:13]*.5)
-    q_prima = q_body2ned.mult_cuat_times_vec(np.array([0,x[11],x[12]]) * .5)
+
+    [phi, theta, psi] = q_body2ned.get_euler_anles()
+    q_prima = q_body2ned.mult_cuat_times_vec(np.array([-x[12]*np.tan(theta),x[11],x[12]]) * .5)
     x_prima[6] = q_prima.d
     x_prima[7:10] = q_prima.v
 
@@ -102,9 +104,10 @@ def ED_cuaterniones(x, u, k, t):
     if fuerzas_y_momentos_calculadas_en_marco_body:
 
         # matriz de cambio de coordenadas, de marco wind a marco body
-        W2B = np.array([[ca * cb, -ca * sb, -sa],
-                        [sb, cb, 0],
-                        [sa * cb, -sa * sb, ca]])
+        if 0:
+            W2B = np.array([[ca * cb, -ca * sb, -sa],
+                            [sb, cb, 0],
+                            [sa * cb, -sa * sb, ca]])
 
         Cx0, Cx2, Cna, Cypa = force_coef_body(mach,alfa,beta)
         Cma, Cmq, Clp, Cnpa = moment_coef_body(mach,alfa,beta)
@@ -220,8 +223,6 @@ def ED_cuaterniones(x, u, k, t):
         # ver que hacemos con g_body y NED_forces, antes estaban arriba
         #
 
-    #quat = utiles.Quaternion(x[6], x[7:10])
-    [phi,theta, psi] = q_body2ned.get_euler_anles()
 
     x_prima[3] = x[12] * x[4] - x[11] * x[5]  - g*np.sin(theta) + Forces[0] / m
     x_prima[4] = -x[12]*np.tan(theta) * x[5] - x[12] * x[3] + 0 + Forces[1] / m

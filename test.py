@@ -134,7 +134,7 @@ def main():
         #15 yardas
         #if solucion[1,0] >= 13.7:
             break
-        if (k % 500) == 0:
+        if (k % 5000) == 0:
             sv.save_data(N,t,x,Ixx,Iyy,Izz)
             proce('./Resultados/Forces.txt')
             proce('./Resultados/Moments.txt')
@@ -150,7 +150,7 @@ def main():
     velocidad_ned = quat.rotate_vector(x[t_N,3:6])
 
     print "Velocidades para tiempo final Vx,Vy,Vz=", velocidad_ned , "[m/s]"
-    print "Coordenadas para tiempo final Vx,Vy,Vz=", x[t_N,0:3] , "[m]"
+    print "Coordenadas para tiempo final Xned,Yned,Zned=", x[t_N,0:3] , "[m]"
 
     sv.save_data(N,t,x,Ixx,Iyy,Izz)
     #cons.conservation(N, x, Ixx, Iyy, Izz)
