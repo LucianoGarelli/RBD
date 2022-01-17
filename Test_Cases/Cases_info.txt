@@ -131,7 +131,12 @@ exCASO 10: Ejemplo Coeficiente de drag variable
 CASO B06
 exCASO 11: Ejemplo Coeficiente de drag variable
        : Cd0 y Cd_delta^2 tomados de tabla Apendix A
-       : .308" 168 grain Sierra International Bullet
+       : .308" 168 grain Sierra International
+######################################################
+CASO B07
+	Ejemplo Coeficiente de drag y CL variable
+       : Cd0 y Cd_delta^2 tomados de tabla Apendix A
+       : .308" 168 grain Sierra International
 ######################################################
 CASO TUERCA MARIPOSA
      representa el efecto Eje de inercia intermedio
