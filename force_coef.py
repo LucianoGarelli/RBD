@@ -90,4 +90,4 @@ def force_coef(mach, alfa, beta):
         
         Cn_q_alfa = 0
 
-    return [Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa]  # ac'a los toma separados? a los ultimos 2
+    return [Cd, Cd0, Cd2, CL_alfa, Cn_p_alfa, Cn_q_alfa]  # ac'a los toma separados? a los ultimos 2

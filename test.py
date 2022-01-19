@@ -65,23 +65,23 @@ def main():
 
     #File to write force coeff
     ff = open("./Resultados/Force_coef.txt", "w")  # xq le pasamos los las fuerzas de todo el CFD??
-    ff.write(" # Time,   Mach,     alfa,     beta,     Cd,     CL_alfa,     Cn_p_alfa,     Cn_q_alfa \n")
+    ff.write(" # Time,      Mach,      alfa,       beta,      Cd,      Cd0,     Cdd2,    CL_alfa,     Cn_p_alfa,     Cn_q_alfa \n")
     ff.close()
     #File to write moment coeff
     fm = open("./Resultados/Moment_coef.txt", "w")
-    fm.write(" # Time,   Mach,     alfa,     beta,     Clp,     Cm_alfa,     Cm_p_alfa,     Cm_q,     Cn_beta,"
+    fm.write(" # Time,     Mach,      alfa,      beta,     Clp,     Cm_alfa,     Cm_p_alfa,     Cm_q,     Cn_beta,"
              "     Cn_r \n")
     fm.close()
 
     # ---------------------------------------------
     # File to write forces - Body Frame
     ff = open("./Resultados/Forces.txt", "w")
-    ff.write("# Time,     alpha,     beta,     V_inf,    u(v_body_X), v(v_body_Y), w(v_body_Z),  p, "
+    ff.write("# Time,      alpha,      beta,      V_inf,     u(v_body_X), v(v_body_Y), w(v_body_Z),  p, "
              "      q,         r,         gx,         gy,       gz,      FX_body,    FY_body,    FZ_body  \n")
     ff.close()
     # File to write moment - Body Frame
     fm = open("./Resultados/Moments.txt", "w")
-    fm.write("# Time,     alpha,      beta,     p,      q,      r,    MX,     MY,     MZ \n")
+    fm.write("# Time,      alpha,       beta,      p,       q,      r,    MX,     MY,     MZ \n")
     fm.close()
     #---------------------------------------------
     

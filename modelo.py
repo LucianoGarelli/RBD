@@ -150,12 +150,12 @@ def ED_cuaterniones(x, u, k, t):
         NED_forces[0:3] = Q_body2ned.dot(C_body[0:3])
 
         ff = open('./Resultados/Forces.txt', 'ab')
-        f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2]])
+        f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2]])
         np.savetxt(ff, [f_force], delimiter=", ", fmt='%1.3e')
         ff.close()
 
         fm = open('./Resultados/Moments.txt', 'ab')
-        m_moment = np.asarray([dt*(k+1), alfad, betad, x[3], x[4], x[5], C_body[3], C_body[4], C_body[5]])
+        m_moment = np.asarray([dt*(k+1), alfa, beta, x[3], x[4], x[5], C_body[3], C_body[4], C_body[5]])
         np.savetxt(fm, [m_moment], delimiter=", ", fmt='%1.3e')
         fm.close()
 
@@ -165,11 +165,11 @@ def ED_cuaterniones(x, u, k, t):
         #aca escribir idem arriba pero con Coef[0], Coef[1],....., Coef[5]
     else:
         # Coeficientes aerodinamicos eje viento
-        Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa = force_coef(mach, alfa, beta)
+        Cd, Cd0, Cdd2, CL_alfa, Cn_p_alfa, Cn_q_alfa = force_coef(mach, alfa, beta)
         Clp, Cm_alfa, Cm_p_alfa, Cm_q, Cn_beta, Cn_r = moment_coef(mach, alfa, beta)
         
         ff = open('./Resultados/Force_coef.txt', 'ab')
-        f_coef = np.asarray([dt*(k +1),  mach, alfa, beta, Cd, CL_alfa, Cn_p_alfa, Cn_q_alfa])
+        f_coef = np.asarray([dt*(k +1),  mach, alfa, beta, Cd, Cd0, Cdd2, CL_alfa, Cn_p_alfa, Cn_q_alfa])
         np.savetxt(ff, [f_coef], delimiter=", ", fmt='%1.3e')
         ff.close()
 
@@ -205,14 +205,14 @@ def ED_cuaterniones(x, u, k, t):
         #NED_forces[0:3] = Q_body2ned.dot(C_body[0:3])
 
         ff = open('./Resultados/Forces.txt', 'ab')
-        f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_Wind[0],C_Wind[1],C_Wind[2]])
+        f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_Wind[0],C_Wind[1],C_Wind[2]])
         #f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], NED_forces[0],NED_forces[1],NED_forces[2]])
         np.savetxt(ff, [f_force], delimiter=", ", fmt='%1.3e')
         ff.close()
 
         fm = open('./Resultados/Moments.txt', 'ab')
         # modificar este para momentos wind
-        m_moment = np.asarray([dt*(k+1), alfad, betad, x[3], x[4], x[5], C_Wind[3], C_Wind[4], C_Wind[5]])
+        m_moment = np.asarray([dt*(k+1), alfa, beta, x[3], x[4], x[5], C_Wind[3], C_Wind[4], C_Wind[5]])
         np.savetxt(fm, [m_moment], delimiter=", ", fmt='%1.3e')
         fm.close()
 
