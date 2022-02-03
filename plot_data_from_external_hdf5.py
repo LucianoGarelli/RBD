@@ -10,8 +10,8 @@ from mpl_toolkits import mplot3d
 
 ## importo hdf5
 #h5f = h5py.File('./Resultados/Data.hdf5','r')
-resu1dir ='./Resultados/Caso_F01/'
-resu2dir ='./Resultados/Caso_E01/'
+resu1dir ='./Resu_ref/Wernert_AIAA2010_7460/Caso_F01/'
+resu2dir ='./Resu_ref/Mostafa ASAT-13-FM-03/Caso_E01/'
 resul = [resu1dir,resu2dir]
 leg = ['caso1', 'caso2']
 
@@ -138,15 +138,15 @@ for i in range(np.size(resul)):
             # angulo de ataque
             alfa = np.arctan2(vb[0][:, 2], vb[0][:, 0])
             alfad = alfa * 180 / math.pi
-            axs_ang[0].plot(t[0], alfad)
+            axs_ang[0].plot(t[0], alfad, label=leg[i])
             # angulo de deslizamiento
             beta = np.arcsin(vb[0][:, 1] / vt)
             betad = beta * 180 / math.pi
-            axs_ang[1].plot(t[0], betad)
+            axs_ang[1].plot(t[0], betad, label=leg[i])
             sin_alfa_t = np.sqrt(((np.sin(beta)) ** 2 + (np.cos(beta)) ** 2 * (np.sin(alfa)) ** 2))
             alfa_t = np.arcsin(sin_alfa_t)
             alfa_t_d = alfa_t * 180 / math.pi
-            axs_ang[2].plot(t[0], alfa_t_d)
+            axs_ang[2].plot(t[0], alfa_t_d, label=leg[i])
 
         axs_ang[0].grid()
         axs_ang[1].grid()
@@ -154,6 +154,9 @@ for i in range(np.size(resul)):
         axs_ang[0].set_title('Alpha')
         axs_ang[1].set_title('Beta')
         axs_ang[2].set_title('Alpha total')
+        axs_ang[0].legend()
+        axs_ang[1].legend()
+        axs_ang[2].legend()
 
 def plot_force(resul, leg):
     fig_size = (12,4)
@@ -175,9 +178,13 @@ def plot_force(resul, leg):
         axs[1].plot(xy[0][:,0],xy[0][:,2], label=leg[k])
         axs[2].plot(xy[0][:,0],xy[0][:,3], label=leg[k])
 
+
     axs[0].set_title('Force X ')
+    axs[0].legend()
     axs[1].set_title('Force Y ')
+    axs[1].legend()
     axs[2].set_title('Force Z ')
+    axs[2].legend()
 
     axs[0].grid(True)
     axs[1].grid(True)
@@ -209,8 +216,11 @@ def plot_moments(resul, leg):
         axs[2].plot(xy[0][:,0],xy[0][:,3], label=leg[k])
 
     axs[0].set_title('Moment X ')
+    axs[0].legend()
     axs[1].set_title('Moment Y ')
+    axs[1].legend()
     axs[2].set_title('Moment Z ')
+    axs[2].legend()
 
     axs[0].grid(True)
     axs[1].grid(True)
