@@ -6,13 +6,23 @@ import utiles
 
 # Grafico la evolucion de los estados
 
-def save_data(N, t, x, Ixx, Iyy, Izz):
+def save_data(N, t, x, Ixx, Iyy, Izz, dir="./Resultados/"):
 
-    if os.path.isfile("./Resultados/Data.hdf5"):
-        os.remove("./Resultados/Data.hdf5")
-        f = h5py.File("./Resultados/Data.hdf5", "a")
+    CHECK_FOLDER = os.path.isdir(dir)
+    # If folder doesn't exist, then create it.
+    if not CHECK_FOLDER:
+        os.makedirs(dir)
+        print("Directorio creado: ", dir)
+
     else:
-        f = h5py.File("./Resultados/Data.hdf5", "a")
+        print(dir, "Directorio existente.")
+
+
+    if os.path.isfile(dir + "Data.hdf5"):
+        os.remove(dir + "Data.hdf5")
+        f = h5py.File(dir + "Data.hdf5", "a")
+    else:
+        f = h5py.File(dir + "Data.hdf5", "a")
 
     f.create_dataset('Inertial_coord', data=x[:,0:3])
 
