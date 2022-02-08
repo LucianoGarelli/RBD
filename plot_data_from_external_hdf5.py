@@ -11,7 +11,8 @@ from mpl_toolkits import mplot3d
 ## importo hdf5
 #h5f = h5py.File('./Resultados/Data.hdf5','r')
 resu1dir ='./Resu_ref/Wernert_AIAA2010_7460/Caso_F01/'
-resu2dir ='./Resu_ref/Mostafa ASAT-13-FM-03/Caso_E01/'
+#resu2dir ='./Resu_ref/Mostafa ASAT-13-FM-03/Caso_E01/'
+resu2dir ='./Resu_ref/Wernert_AIAA2010_7460/Caso_F01_unificated/'
 resul = [resu1dir,resu2dir]
 leg = ['caso1', 'caso2']
 
@@ -93,7 +94,8 @@ for i in range(np.size(resul)):
         axs_n[k].plot(t[0], vned[0][:,k], label=leg[i])
         axs_n[k].legend()
         axs_n[k].grid()
-    axs_n[3].plot(t[0], np.linalg.norm(vned[0], axis=1))
+    #axs_n[3].plot(t[0], np.linalg.norm(vned[0], axis=1))
+    axs_n[3].plot(t[0], np.linalg.norm(vb[0], axis=1)) # plot vel mag body-frame
     axs_n[3].grid()
     axs_n[0].set_title('vx')
     axs_n[1].set_title('vy')
