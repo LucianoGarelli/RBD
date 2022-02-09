@@ -13,7 +13,7 @@ time = np.linspace(t0,tf,N)
 # input data
 # alpha
 data = []
-dir_save = './Resu_ref/Wernert_AIAA2010_7460/Caso_F01_unificated_V2/'
+dir_save = './Resu_ref/Wernert_AIAA2010_7460/Caso_F01_unificated/'
 dir_load = './Resu_ref/Wernert_AIAA2010_7460/'
 
 data = np.loadtxt(dir_load + 'alpha_BFP.csv', delimiter=',', skiprows=1)
@@ -66,8 +66,9 @@ Fx = Fxtot_inter-Fxg_inter # hay que sustraerle el aporte de la gravedad, ya que
 # Force Y tot
 data = []
 data = np.loadtxt(dir_load +'Forces_Y_tot_BFP.csv', delimiter=',', skiprows=1)
-t_Fytot = data[:,0]
-Fytot = data[:,1]
+data_raw = data[data[:, 0].argsort()]
+t_Fytot = data_raw[:,0]
+Fytot = data_raw[:,1]
 # interpolated data
 Fytot_inter = np.interp(time, t_Fytot, Fytot)
 
@@ -87,8 +88,9 @@ Fy = Fytot_inter-Fyg_inter
 # Force Z tot
 data = []
 data = np.loadtxt(dir_load +'Forces_Z_tot_BFP.csv', delimiter=',', skiprows=1)
-t_Fztot = data[:,0]
-Fztot = data[:,1]
+data_raw = data[data[:, 0].argsort()]
+t_Fztot = data_raw[:,0]
+Fztot = data_raw[:,1]
 # interpolated data
 Fztot_inter = np.interp(time, t_Fztot, Fztot)
 
@@ -226,14 +228,16 @@ mx_inter = np.interp(time, t_mx, mx)
 # Moment Y
 data = []
 data = np.loadtxt(dir_load +'Moment_Y_tot_BFP.csv', delimiter=',', skiprows=1)
-t_my = data[:,0]
-my = data[:,1]
+data_raw = data[data[:, 0].argsort()]
+t_my = data_raw[:,0]
+my = data_raw[:,1]
+
 # interpolated data
 my_inter = np.interp(time, t_my, my)
 
 # Moment Z
 data = []
-data = np.loadtxt(dir_load + 'Moment_Z_tot_BFP.csv', delimiter=',', skiprows=1)
+data = np.loadtxt(dir_load + 'Moment_Z_tot_BFP2.csv', delimiter=',', skiprows=1)
 t_mz = data[:,0]
 mz = data[:,1]
 # interpolated data
@@ -321,13 +325,13 @@ plt.title('FZ BFP')
 plt.xlabel('Time [s]')
 '''
 
-plt.plot(t_mz,mz,label='Mz tot BFP')
+plt.plot(t_Fzg,Fzg,label='My tot BFP')
 #plt.plot(time,Fztot_inter,label='Fz tot inter')
 #plt.plot(time,Fz,label='Fz s/G inter')
 #plt.plot(time,Fzg_inter,label='Fz G inter')
 plt.legend()
 #plt.set_xlim([min(time), max(time)])
-plt.title('MZ BFP')
+plt.title('MY BFP')
 plt.xlabel('Time [s]')
 
 #sv.save_data(N, time, x, Ixx, Iyy, Izz)
