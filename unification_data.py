@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 import save_data as sv
+from data_smoothing import data_smoothing
 
 # define unification time
 t0 = 10
@@ -22,6 +23,8 @@ alpha = -1*data[:,1]
 # interpolated data
 alpha_inter = np.interp(time, t_alpha, alpha)
 alpha_inter = np.deg2rad(alpha_inter)
+alpha_inter_f = data_smoothing(time,alpha_inter,1000,0.9,plot = True,plot_title = 'alpha')
+
 
 # input data
 # beta
@@ -32,6 +35,7 @@ beta = -1*data[:,1]
 # interpolated data
 beta_inter = np.interp(time, t_beta, beta)
 beta_inter = np.deg2rad(beta_inter)
+beta_inter_f = data_smoothing(time,beta_inter,100,0.9,plot = True, plot_title = 'beta')
 
 # input data
 # alpha total
@@ -41,6 +45,7 @@ t_alpha_tot = data[:,0]
 alpha_tot = data[:,1]
 # interpolated data
 alpha_tot_inter = np.interp(time, t_alpha_tot, alpha_tot)
+alpha_tot_inter_f = data_smoothing(time,alpha_tot_inter,100,0.9,plot = True,plot_title = 'alpha tot')
 
 # input data
 # Force X tot
@@ -61,6 +66,7 @@ Fxg = data[:,1]
 Fxg_inter = np.interp(time, t_Fxg, Fxg)
 
 Fx = Fxtot_inter-Fxg_inter # hay que sustraerle el aporte de la gravedad, ya que el modelo de estimaci'on no lo contempla
+Fx_f = data_smoothing(time,Fx,100,0.9,plot = True, plot_title = 'Fx')
 
 # input data
 # Force Y tot
@@ -83,6 +89,7 @@ pp =  np.shape(Fytot_inter)
 Fyg_inter = np.zeros(pp)
 
 Fy = Fytot_inter-Fyg_inter
+Fy_f = data_smoothing(time, Fy, 100, 0.9, plot = True, plot_title = 'Fy')
 
 # input data
 # Force Z tot
@@ -104,6 +111,7 @@ Fzg = data[:,1]
 Fzg_inter = np.interp(time, t_Fzg, Fzg)
 
 Fz = Fztot_inter-Fzg_inter
+Fz_f = data_smoothing(time,Fz,100,0.9, plot = True, plot_title = 'Fz')
 
 # p -roll
 # spin rate BFP = spin rate BR
@@ -114,6 +122,7 @@ p = data[:,1]
 # interpolated data
 p_inter = 2.*np.pi*np.interp(time, t_p, p)
 #p_inter = np.pi*np.interp(time, t_p, p)
+p_inter_f = data_smoothing(time,p_inter,100,0.9, plot = True, plot_title = 'p')
 
 # q - pith rate
 data = []
@@ -123,6 +132,7 @@ q = data[:,1]
 # interpolated data
 q_inter = 2.*np.pi*np.interp(time, t_q, q)
 #q_inter = np.pi*np.interp(time, t_q, q)
+q_inter_f = data_smoothing(time,q_inter,100,0.9, plot = True, plot_title = 'q')
 
 # r -yaw rate
 data = []
@@ -132,6 +142,7 @@ r = data[:,1]
 # interpolated data
 r_inter = 2.*np.pi*np.interp(time, t_r, r)
 #r_inter = np.pi*np.interp(time, t_r, r)
+r_inter_f = data_smoothing(time,r_inter,100,0.9, plot = True, plot_title = 'r')
 
 # vel "x" en NED
 data = []
@@ -140,6 +151,7 @@ t_vxned = data[:,0]
 vxned = data[:,1]
 # interpolated data
 vxned_inter = np.interp(time, t_vxned, vxned)
+vxned_inter_f = data_smoothing(time,vxned_inter ,100,0.9, plot = True, plot_title = 'Vel x NED')
 
 # vel "y" en NED
 data = []
@@ -148,6 +160,7 @@ t_vyned = data[:,0]
 vyned = data[:,1]
 # interpolated data
 vyned_inter = np.interp(time, t_vyned, vyned)
+vyned_inter_f = data_smoothing(time,vyned_inter, 100,0.9, plot = True, plot_title = 'Vel y NED')
 
 # vel "z" en NED
 data = []
@@ -156,6 +169,7 @@ t_vzned = data[:,0]
 vzned = data[:,1]
 # interpolated data
 vzned_inter = np.interp(time, t_vzned, vzned)
+vzned_inter_f = data_smoothing(time,vzned_inter ,100,0.9, plot = True, plot_title = 'Vel z NED')
 
 # Vel NED
 data = []
@@ -164,6 +178,7 @@ t_vel = data[:,0]
 vel = data[:,1]
 # interpolated data
 vel_inter = np.interp(time, t_vel, vel)
+vel_inter_f = data_smoothing(time,vel_inter ,100,0.9, plot = True, plot_title = 'Vel mag NED')
 
 vt_calc = np.sqrt(3)
 vt_calc = np.sqrt(vxned_inter**2+vyned_inter**2+vzned_inter**2)
@@ -199,6 +214,7 @@ t_xe = data[:,0]
 xe = data[:,1]
 # interpolated data
 xe_inter = 1000.*np.interp(time, t_xe, xe)
+xeinter_f = data_smoothing(time,xe_inter ,100,0.9, plot = True, plot_title = 'Range')
 
 # y - recorrido  lateral
 data = []
@@ -208,6 +224,7 @@ ye = data[:,1]
 # interpolated data
 #ye_inter = -1.*np.interp(time, t_ye, ye)
 ye_inter = np.interp(time, t_ye, ye)
+yeinter_f = data_smoothing(time,ye_inter ,100,0.9, plot = True, plot_title = 'Lateral Desviation')
 
 # z - altura
 data = []
@@ -216,6 +233,7 @@ t_ze = data[:,0]
 ze = data[:,1]
 # interpolated data
 ze_inter = 1000*np.interp(time, t_ze, ze)
+zeinter_f = data_smoothing(time,ze_inter ,100,0.9, plot = True, plot_title = 'Altitud')
 
 # Moment X
 data = []
@@ -224,6 +242,7 @@ t_mx = data[:,0]
 mx = data[:,1]
 # interpolated data
 mx_inter = np.interp(time, t_mx, mx)
+mx_inter_f = data_smoothing(time,mx_inter ,100,0.9, plot = True, plot_title = 'Mx')
 
 # Moment Y
 data = []
@@ -234,6 +253,7 @@ my = data_raw[:,1]
 
 # interpolated data
 my_inter = np.interp(time, t_my, my)
+my_inter_f = data_smoothing(time,my_inter ,100,0.9, plot = True, plot_title = 'My')
 
 # Moment Z
 data = []
@@ -242,6 +262,7 @@ t_mz = data[:,0]
 mz = data[:,1]
 # interpolated data
 mz_inter = np.interp(time, t_mz, mz)
+mz_inter_f = data_smoothing(time,mz_inter ,100,0.9, plot = True, plot_title = 'Mz')
 
 CHECK_FOLDER = os.path.isdir(dir_save)
 # If folder doesn't exist, then create it.
@@ -260,7 +281,7 @@ ff.close()
 
 ff = open( dir_save +'Forces_proc.txt', 'ab')
 #f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2]])
-f_force = np.asarray([time, alpha_inter, beta_inter, vel_inter, ue_inter, ve_inter, we_inter, p_inter, q_inter, r_inter, Fxg_inter, Fyg_inter, Fzg_inter, Fx, Fy, Fz])
+f_force = np.asarray([time, alpha_inter_f, beta_inter_f, vel_inter_f, ue_inter, ve_inter, we_inter, p_inter_f, q_inter_f, r_inter_f, Fxg_inter, Fyg_inter, Fzg_inter, Fx_f, Fy_f, Fz_f])
 f_force = f_force.T
 np.savetxt(ff, f_force, delimiter=", ", fmt='%1.3e')
 ff.close()
@@ -272,7 +293,7 @@ fm.close()
 
 fm = open(dir_save + 'Moments_proc.txt', 'ab')
 # modificar este para momentos wind
-m_moment = np.asarray([time, alpha_inter, beta_inter, p_inter,  q_inter, r_inter, mx_inter, my_inter, mz_inter])
+m_moment = np.asarray([time, alpha_inter_f, beta_inter_f, p_inter_f,  q_inter_f, r_inter_f, mx_inter_f, my_inter_f, mz_inter_f])
 m_moment = m_moment.T
 np.savetxt(fm, m_moment, delimiter=", ", fmt='%1.3e')
 fm.close()
@@ -280,13 +301,17 @@ fm.close()
 N = np.size(p_inter)
 
 # creamos le vector de estados, para usar save_data
-x = np.zeros((N,15))
+x = np.zeros((N+1,15))
 #x[:,0:3] = [ze_inter ze_inter ze_inter]
-x[:,0] = xe_inter
-x[:,1] = ye_inter
-x[:,2] = ze_inter
+x[0,0] = xe_inter[0]
+x[1:N+1,0] = xe_inter
+x[0,1] = ye_inter[0]
+x[1:N+1,1] = ye_inter
+x[0,2] = ze_inter[0]
+x[1:N+1,2] = ze_inter
 # aca empieza a rellenar CHECK
-x[:,3] = vt_calc #vel_body[0]
+x[0,3] = vt_calc[0]
+x[1:N+1,3] = vt_calc #vel_body[0]
 #x[:,4] = vt_calc#vel_body[1]
 #x[:,5] = vt_calc#vel_body[2]
 '''
@@ -298,11 +323,17 @@ x[:,9] = ze_inter
 #x[3] = V*math.cos(alfa)*math.cos(beta) # velocidad inicial en body
 #x[4] = V*math.sin(beta)
 #x[5] = V*math.sin(alfa)*math.cos(beta)
-x[:,10] = p_inter # rotacion inicial en body
-x[:,11] = q_inter
-x[:,12] = r_inter
-x[:,13] = alpha_inter
-x[:,14] = beta_inter
+x[0,10] = p_inter[0] # rotacion inicial en body
+x[1:N+1,10] = p_inter
+x[0,11] = q_inter[0]
+x[1:N+1,11] = q_inter
+x[0,12] = r_inter[0]
+x[1:N+1,12] = r_inter
+x[0,13] = alpha_inter[0]
+x[1:N+1,13] = alpha_inter
+x[0,14] = beta_inter[0]
+x[1:N+1,14] = beta_inter
+
 
 print(x[1,:])
 '''
@@ -325,6 +356,8 @@ plt.title('FZ BFP')
 plt.xlabel('Time [s]')
 '''
 
+fig_size = (12, 4)
+fig, axs = plt.subplots(1, 1, figsize=fig_size)
 plt.plot(t_Fzg,Fzg,label='My tot BFP')
 #plt.plot(time,Fztot_inter,label='Fz tot inter')
 #plt.plot(time,Fz,label='Fz s/G inter')
@@ -335,7 +368,8 @@ plt.title('MY BFP')
 plt.xlabel('Time [s]')
 
 #sv.save_data(N, time, x, Ixx, Iyy, Izz)
-sv.save_data(N-1, time, x, 0, 0, 0,dir_save)
+#sv.save_data(N-1, time, x, 0, 0, 0,dir_save)
+sv.save_data(N, time, x, 0, 0, 0,dir_save)
 
 print('*-----------------------------------------------*')
 print('\nFIN! - OK.\n')
