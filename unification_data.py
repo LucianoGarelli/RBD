@@ -8,7 +8,7 @@ from data_smoothing import data_smoothing
 # define unification time
 t0 = 10
 tf = 97
-N = 1000
+N = 5000
 time = np.linspace(t0,tf,N)
 
 # input data
@@ -281,7 +281,7 @@ ff.close()
 
 ff = open( dir_save +'Forces_proc.txt', 'ab')
 #f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_body[0],C_body[1],C_body[2]])
-f_force = np.asarray([time, alpha_inter_f, beta_inter_f, vel_inter_f, ue_inter, ve_inter, we_inter, p_inter_f, q_inter_f, r_inter_f, Fxg_inter, Fyg_inter, Fzg_inter, Fx_f, Fy_f, Fz_f])
+f_force = np.asarray([time, alpha_inter_f, beta_inter_f, vel_inter_f, ue_inter, ve_inter, we_inter, p_inter_f, q_inter_f, r_inter_f, Fxg_inter, Fyg_inter, Fzg_inter, Fx_f, -1*Fy_f, Fz_f])
 f_force = f_force.T
 np.savetxt(ff, f_force, delimiter=", ", fmt='%1.3e')
 ff.close()
@@ -302,6 +302,8 @@ N = np.size(p_inter)
 
 # creamos le vector de estados, para usar save_data
 x = np.zeros((N+1,15))
+time_hdf5 = np.zeros(N+1)
+time_hdf5[1:N+1] = time
 #x[:,0:3] = [ze_inter ze_inter ze_inter]
 x[0,0] = xe_inter[0]
 x[1:N+1,0] = xe_inter
@@ -334,6 +336,9 @@ x[1:N+1,13] = alpha_inter
 x[0,14] = beta_inter[0]
 x[1:N+1,14] = beta_inter
 
+#sv.save_data(N, time, x, Ixx, Iyy, Izz)
+#sv.save_data(N-1, time, x, 0, 0, 0,dir_save)
+sv.save_data(N, time_hdf5, x, 0, 0, 0,dir_save)
 
 print(x[1,:])
 '''
@@ -367,9 +372,6 @@ plt.legend()
 plt.title('MY BFP')
 plt.xlabel('Time [s]')
 
-#sv.save_data(N, time, x, Ixx, Iyy, Izz)
-#sv.save_data(N-1, time, x, 0, 0, 0,dir_save)
-sv.save_data(N, time, x, 0, 0, 0,dir_save)
 
 print('*-----------------------------------------------*')
 print('\nFIN! - OK.\n')
