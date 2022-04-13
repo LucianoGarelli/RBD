@@ -10,8 +10,9 @@ from mpl_toolkits import mplot3d
 
 ## importo hdf5
 #h5f = h5py.File('./Resultados/Data.hdf5','r')
-resu1dir ='./Resu_ref/Wernert_AIAA2010_7460/Caso_F01/'
+#resu1dir ='./Resu_ref/Wernert_AIAA2010_7460/Caso_F01/'
 resu2dir ='./Resu_ref/RBD_coef_from_MHE/Caso_F01/'
+resu1dir ='./Resu_ref/RBD_coef_from_MHE/Caso_F01_unificated/'
 #resu2dir ='./Resu_ref/Mostafa ASAT-13-FM-03/Caso_E01/'
 resul = [resu1dir,resu2dir]
 leg = ['caso1', 'caso2']
