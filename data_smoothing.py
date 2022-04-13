@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from csaps import csaps
 from scipy.signal import savgol_filter
 
-def data_smoothing(x, y, N, smooth, plot,plot_title):
+def data_smoothing(x, y, N, alpha, plot,plot_title):
     '''
     x: interpolated time, unified independet variable
     y: value to be smoothed
@@ -18,7 +18,8 @@ def data_smoothing(x, y, N, smooth, plot,plot_title):
 
     xs = np.linspace(data_raw[0,0], data_raw[-1,0], N)
     #yhat = csaps(xs, y, xs, smooth=0.999)
-    yhat = csaps(x, y, x, smooth=0.999)
+    #yhat = csaps(x, y, x, smooth=0.999)
+    yhat = csaps(x, y, x, smooth=alpha)
     #yhat = savgol_filter(xs, 51, 5)
     if plot:
         fig_size = (12,4)

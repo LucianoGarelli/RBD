@@ -8,7 +8,7 @@ from data_smoothing import data_smoothing
 # define unification time
 t0 = 10
 tf = 97
-N = 5000
+N = 6000
 time = np.linspace(t0,tf,N)
 
 # input data
