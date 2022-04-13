@@ -45,6 +45,7 @@ t_alpha_tot = data[:,0]
 alpha_tot = data[:,1]
 # interpolated data
 alpha_tot_inter = np.interp(time, t_alpha_tot, alpha_tot)
+alpha_tot_inter = np.deg2rad(alpha_tot_inter)
 alpha_tot_inter_f = data_smoothing(time,alpha_tot_inter,100,0.9,plot = True,plot_title = 'alpha tot')
 
 # input data
