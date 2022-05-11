@@ -10,7 +10,7 @@ data = np.loadtxt(dir_load + file_name, delimiter=',', skiprows=1)
 Case = 'F01'
 Nt = '1'
 MHE = 'MPC casadi tools' # MPC tools or ad-hod
-Noise = 'False'
+Noise = 'True'
 
 x = data
 #  Time  ,    Mach  ,  alpha_tot,    Cd0   ,  Cl_alpha,    Cd2   , Cn_p_alpha,    Clp    ,  Cm_alpha , Cm_p_alpha,    Cm_q \n
@@ -46,6 +46,9 @@ for k in range(n3):
         if cont[k,j] != 0:
             coef[k,j] = acum[k,j]/cont[k,j]
 
+# Subsonic regimen adopted constant
+coef[0,:] = coef[1,:]
+
 # FIXME ! se puede mejorar con un vector de re-ordenamiento
 coef_reorg = np.zeros((n3,ncoef))
 coef_reorg[:,0] = coef[:,0] # Cd0
@@ -62,7 +65,7 @@ coef2 = np.concatenate((M,coef_reorg),axis=1)
 
 # File to write force coeff
 dir_load_w = '/home/ntrivi/Documents/Tesis/RBD/Resu_ref/body_coef_txt/'
-file_name_w = 'Coef_estim_from_MHE_' + Case + '_Nt_' + Nt + '.txt'
+file_name_w = 'Coef_estim_from_MHE_' + Case + '_Nt_' + Nt + '_Noise_' + Noise +'.txt'
 file_w = dir_load_w + file_name_w
 
 ff = open(file_w, "w")
