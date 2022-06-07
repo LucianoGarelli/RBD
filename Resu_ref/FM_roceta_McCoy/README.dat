@@ -1,0 +1,6 @@
+En los test_cases se denoina data_C_Z_FM01_exC09
+
+Se intenta replicar el caso precesión-nutación de McCoy. Caso. Ejem 9.1 pg 194, Mun. Sierra .308 coef, según pg 217.
+El mismo se alcanza con las ecuaciones del modelo de la tesis francesa (Identification of aerodynamics coeff. from free flight data, Marie Albisser), no incorpora Magnus al modelo.
+
+Nunca se pudo obtener el mismo resultado que en 2018, ver caso old-version. En las últimas simulaciones captura comportamientos similares, pero en el eje "z" hay un cambio raro, respecto a la otra versión. Y además en las velocidades en marco body, no se obtiene el comportamiento oscilatorio como en la versión anterior.

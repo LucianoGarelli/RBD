@@ -65,7 +65,7 @@ def main():
 
     #File to write force coeff
     ff = open("./Resultados/Force_coef.txt", "w")  # xq le pasamos los las fuerzas de todo el CFD??
-    ff.write(" # Time,     Mach,      alfa,      beta,      Cd,      Cd0,     Cdd2,     CL_alfa,     Cn_p_alfa,     Cn_q_alfa \n")
+    ff.write(" # Time,     Mach,      alfa,      beta,      Cd,      Cd0,     Cd2,     CL_alfa,     Cn_p_alfa,     Cn_q_alfa \n")
     ff.close()
     #File to write moment coeff
     fm = open("./Resultados/Moment_coef.txt", "w")
