@@ -36,9 +36,9 @@ def force_coef(mach, alfa, beta):
 
         # Cdd2
         Md2 = [0, 0.95, 1, 1.05, 1.1, 1.2, 1.4, 1.6, 1.8, 2.0, 2.2, 2.5]
-        Cdd2_exp = [2.9, 2.9, 3.0, 3.1, 3.6, 6.5, 7.6, 7.3, 6.8, 6.1, 5.4, 4.4]
+        Cd2_exp = [2.9, 2.9, 3.0, 3.1, 3.6, 6.5, 7.6, 7.3, 6.8, 6.1, 5.4, 4.4]
 
-        Cd2 = np.interp(mach, Md2, Cdd2_exp)
+        Cd2 = np.interp(mach, Md2, Cd2_exp)
 
         alfa_total2 = ((math.sin(beta))**2 + (math.cos(beta))**2*(math.sin(alfa))**2)
         Cd = Cd0 + Cd2*alfa_total2

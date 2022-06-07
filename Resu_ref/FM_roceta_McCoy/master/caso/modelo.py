@@ -58,10 +58,7 @@ def ED_cuaterniones(x, u, k, t):
     x_prima[0:3] = Q_body2ned.dot(x[3:6])  # paso la velocidad de body[3:6] a ned[0:3]
     x_prima[2] *= -1. # para tener altura en vez de "profundidad"
 
-    #q_prima = q_body2ned.mult_cuat_times_vec(x[10:13]*.5)
-
-    [phi, theta, psi] = q_body2ned.get_euler_anles()
-    q_prima = q_body2ned.mult_cuat_times_vec(np.array([-x[12]*np.tan(theta),x[11],x[12]]) * .5)
+    q_prima = q_body2ned.mult_cuat_times_vec(x[10:13]*.5)
     x_prima[6] = q_prima.d
     x_prima[7:10] = q_prima.v
 
@@ -104,10 +101,9 @@ def ED_cuaterniones(x, u, k, t):
     if fuerzas_y_momentos_calculadas_en_marco_body:
 
         # matriz de cambio de coordenadas, de marco wind a marco body
-        if 0:
-            W2B = np.array([[ca * cb, -ca * sb, -sa],
-                            [sb, cb, 0],
-                            [sa * cb, -sa * sb, ca]])
+        W2B = np.array([[ca * cb, -ca * sb, -sa],
+                        [sb, cb, 0],
+                        [sa * cb, -sa * sb, ca]])
 
         Cx0, Cx2, Cna, Cypa = force_coef_body(mach,alfa,beta)
         Cma, Cmq, Clp, Cnpa = moment_coef_body(mach,alfa,beta)
@@ -190,14 +186,14 @@ def ED_cuaterniones(x, u, k, t):
         w = vel_rel_body[2]
         C_Wind[0] = qdy*S*(-Cd*ca*cb + CL_alfa*(sb**2 + sa**2 * cb**2) )
         C_Wind[1] = qdy*S*(-Cd*sb - CL_alfa*(ca*sb*cb) - Cn_p_alfa*x[10]*diam*(sa*cb)/vt )
-        C_Wind[2] = qdy*S*(-Cd*sa*cb - CL_alfa*(sa*ca*cb**2) - Cn_p_alfa*x[10]*diam*sb/vt)
+        C_Wind[2] = qdy*S*(-Cd*sa*cb - CL_alfa*(sa*ca*cb**2) + Cn_p_alfa*x[10]*diam*sb/vt)
             
         #####################################
         #Momentos ejes viento
         C_Wind[3] = qdy*S*diam*(x[10]*diam/(2*vt))*Clp
         # qt = sqrt(q^2 + r^2) McCoy pag.38 VER Cm_q y Cn_r
-        C_Wind[4] = qdy*S*diam*(Cm_alfa*(sa*cb) - (x[10]*diam/vt)*(-Cm_p_alfa)*sb +  (diam/(2*vt))*Cm_q * x[11])
-        C_Wind[5] = qdy*S*diam*(-Cm_alfa*sb - (x[10]*diam/vt)*(-Cm_p_alfa)*(sa*cb) + (diam/(2*vt))*Cm_q * x[12])
+        C_Wind[4] = qdy*S*diam*(Cm_alfa*(sa*cb) - (x[10]*diam/(2*vt))*(-Cm_p_alfa)*sb +  (diam/(2*vt))*Cm_q * x[11])
+        C_Wind[5] = qdy*S*diam*(-Cm_alfa*sb - (x[10]*diam/(2*vt))*(-Cm_p_alfa)*(sa*cb) + (diam/(2*vt))*Cm_q * x[12])
             
         # ver como plantear la gravedad en ejes viento y eso de NED_forces
         # g_body no lo cambié, la fórmula es similar al g_body
@@ -206,7 +202,7 @@ def ED_cuaterniones(x, u, k, t):
 
         ff = open('./Resultados/Forces.txt', 'ab')
         f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], C_Wind[0],C_Wind[1],C_Wind[2]])
-        #f_force = np.asarray([dt*(k+1), alfad, betad, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], NED_forces[0],NED_forces[1],NED_forces[2]])
+        #f_force = np.asarray([dt*(k+1), alfa, beta, vt, x[3], x[4], x[5], x[10], x[11], x[12],g_body[0],g_body[1],g_body[2], NED_forces[0],NED_forces[1],NED_forces[2]])
         np.savetxt(ff, [f_force], delimiter=", ", fmt='%1.3e')
         ff.close()
 
@@ -223,16 +219,12 @@ def ED_cuaterniones(x, u, k, t):
         # ver que hacemos con g_body y NED_forces, antes estaban arriba
         #
 
-
-    x_prima[3] = x[12] * x[4] - x[11] * x[5]  - g*np.sin(theta) + Forces[0] / m
-    x_prima[4] = -x[12]*np.tan(theta) * x[5] - x[12] * x[3] + 0 + Forces[1] / m
-    x_prima[5] = x[11] * x[3] + x[12]*np.tan(theta) * x[4] + g*np.cos(theta) + Forces[2] / m
-
+    x_prima[3] = x[12] * x[4] - x[11] * x[5] + g_body[0] + Forces[0] / m
+    x_prima[4] = x[10] * x[5] - x[12] * x[3] + g_body[1] + Forces[1] / m
+    x_prima[5] = x[11] * x[3] - x[10] * x[4] + g_body[2] + Forces[2] / m
 
     # Lo siguiente es equivalente a hacer A\b en matlab en vez inv(A)*b (siempre conviene evitar calcular inversas)
-    x_prima[10:13] = sp.linalg.solve(inertia_tensor, np.cross(inertia_tensor.dot(x[10:13]),
-                                                              np.array([-x[12]*np.tan(theta),x[11],x[12]]))
-                                     + Moments, sym_pos=True)
+    x_prima[10:13] = sp.linalg.solve(inertia_tensor, np.cross(inertia_tensor.dot(x[10:13]), x[10:13]) + Moments, sym_pos=True)
     # sym_pos indica que el tensor de inercia es simétrico y definido positivo, lo que acelera los cálculos
 
 
