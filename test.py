@@ -130,12 +130,16 @@ def main():
         #Renormalizacion quaterniones
         #x[k+1,6:10] /= np.linalg.norm(x[k+1,6:10])
         t_N = k+1
-        if x[1,2] < -1.0:
+        #if x[1,2] < -1.0:
         #15 yardas
         #if solucion[1,0] >= 13.7:
+        #    break
+        if x[t_N,2] < 0.0:
+            print '#########################'
+            print 'Cut-off, floor impact, t=',t[t_N],'[s]'
             break
         if (k % 5000) == 0:
-            sv.save_data(N,t,x,Ixx,Iyy,Izz)
+            sv.save_data(t_N,t[0:t_N+1],x[0:t_N+1,:],Ixx,Iyy,Izz)
             proce('./Resultados/Forces.txt')
             proce('./Resultados/Moments.txt')
 
@@ -152,13 +156,13 @@ def main():
     print "Velocidades para tiempo final Vx,Vy,Vz=", velocidad_ned , "[m/s]"
     print "Coordenadas para tiempo final Xned,Yned,Zned=", x[t_N,0:3] , "[m]"
 
-    sv.save_data(N,t,x,Ixx,Iyy,Izz)
+    sv.save_data(t_N,t[0:t_N+1],x[0:t_N+1,:],Ixx,Iyy,Izz)
     #cons.conservation(N, x, Ixx, Iyy, Izz)
     proce('./Resultados/Force_coef.txt')
     proce('./Resultados/Forces.txt')
     proce('./Resultados/Moment_coef.txt')
     proce('./Resultados/Moments.txt')
-    plt_data.plot_data(N, t, x, phi, theta, psi)
+    plt_data.plot_data(t_N, t[0:t_N+1], x[0:t_N+1,:], phi, theta, psi)
     plt_data.plot_force()
     plt_data.plot_moments()
 
