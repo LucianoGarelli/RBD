@@ -75,7 +75,7 @@ def moment_coef(mach,alfa,beta):
         if not globals.Moments_coef_readed:
             # data = np.loadtxt('Resu_ref/body_coef_txt/bc_baranwonski.txt', delimiter=',', skiprows=3)
             #data_raw = np.loadtxt('Resu_ref/body_coef_txt/bc_egipcio.txt', delimiter=',', skiprows=3)
-            data_raw = np.loadtxt('Resu_ref/body_coef_txt/Coef_estim_from_MHE_F01_unificated.txt', delimiter=',', skiprows=3)
+            data_raw = np.loadtxt('Resu_ref/body_coef_txt/bc_M107_estimated_IPopt_MAIN.csv', delimiter=',', skiprows=3)
             # data = np.loadtxt('Resu_ref/body_coef_txt/bc_NWU_104pg.txt', delimiter=',', skiprows=3)
             data = data_raw[0:-1]
             globals.data = data
